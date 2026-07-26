@@ -100,7 +100,7 @@ const PrismaHero = () => {
           loop
           muted
           playsInline
-          poster="/hero-scene.png"
+          poster="/hero-poster.jpg"
           aria-label="A 26-year-old African-American forward deployed engineer with black locs, sitting atop a tower typing on his laptop in a futuristic city at golden hour"
           className="absolute inset-0 h-full w-full object-cover object-center"
         >

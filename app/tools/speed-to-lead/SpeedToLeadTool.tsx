@@ -139,6 +139,7 @@ export default function SpeedToLeadTool() {
       {/* Form card */}
       <form
         onSubmit={submit}
+        noValidate
         data-testid="lead-form"
         className="h-fit rounded-3xl border border-white bg-white/80 p-6 shadow-[0_20px_60px_-25px_rgba(79,70,229,0.35)] backdrop-blur sm:p-7"
       >

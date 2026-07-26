@@ -2,6 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { caseStudies, caseStudyBySlug } from "@/content/case-studies";
 import { Badge, Button } from "@/components/ui";
+import { SpeedToLeadPipeline } from "@/components/demos/SpeedToLeadPipeline";
+import { OptimisticOS } from "@/components/demos/OptimisticOS";
 
 export function generateStaticParams() {
   return caseStudies.map((c) => ({ slug: c.slug }));
@@ -21,7 +23,7 @@ function List({ items }: { items: string[] }) {
     <ul className="space-y-2.5">
       {items.map((i, k) => (
         <li key={k} className="flex gap-3 text-cream/90">
-          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-ember" />
+          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
           <span className="leading-relaxed">{i}</span>
         </li>
       ))}
@@ -34,12 +36,12 @@ export default function CaseStudyPage({ params }: { params: { slug: string } }) 
   if (!c) notFound();
   return (
     <main className="container-x py-20 md:py-28">
-      <Link href="/#work" className="font-mono text-xs text-muted hover:text-ember">← All case studies</Link>
+      <Link href="/#work" className="font-mono text-xs text-muted hover:text-accent">← All case studies</Link>
       <h1 className="mt-6 font-display text-hero text-cream">{c.title}</h1>
       <p className="mt-4 max-w-2xl text-lg text-muted">{c.tagline}</p>
       <div className="mt-5 flex flex-wrap gap-2">
         {c.stack.map((s) => (
-          <Badge key={s} tone="ember">{s}</Badge>
+          <Badge key={s} tone="accent">{s}</Badge>
         ))}
       </div>
 
@@ -54,6 +56,14 @@ export default function CaseStudyPage({ params }: { params: { slug: string } }) 
           </div>
         )}
       </div>
+
+      {c.liveDemo && (
+        <div className="mt-12 border-t border-edge pt-10">
+          <p className="eyebrow mb-4">Live demo</p>
+          {c.liveDemo === "speed-to-lead" && <SpeedToLeadPipeline />}
+          {c.liveDemo === "optimistic-os" && <OptimisticOS />}
+        </div>
+      )}
     </main>
   );
 }

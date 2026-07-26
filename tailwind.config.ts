@@ -10,7 +10,7 @@ const config: Config = {
         edge: "#26282E",
         cream: "#ECE7DF",
         muted: "#9A968E",
-        ember: { DEFAULT: "#FF6A3D", soft: "#FF8A63", dim: "#B84A29" },
+        accent: { DEFAULT: "#22D3EE", soft: "#67E8F9", dim: "#0E7490" },
       },
       fontFamily: {
         display: ["var(--font-display)", "system-ui", "sans-serif"],
@@ -22,7 +22,7 @@ const config: Config = {
         section: ["clamp(1.8rem,3.5vw,2.75rem)", { lineHeight: "1.05", letterSpacing: "-0.02em" }],
       },
       boxShadow: {
-        glow: "0 0 0 1px rgba(255,106,61,0.25), 0 8px 40px -12px rgba(255,106,61,0.35)",
+        glow: "0 0 0 1px rgba(34,211,238,0.25), 0 8px 40px -12px rgba(34,211,238,0.35)",
         card: "0 1px 0 0 rgba(255,255,255,0.04) inset, 0 20px 50px -30px rgba(0,0,0,0.8)",
       },
     },

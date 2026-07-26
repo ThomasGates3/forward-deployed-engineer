@@ -44,7 +44,7 @@ export function SupportReply() {
         onFocus={() => setScenario("custom")}
         rows={4}
         placeholder="e.g. My account was frozen and I don't know why…"
-        className="w-full resize-y rounded-lg border border-edge bg-surface/70 p-3 font-mono text-sm text-cream placeholder:text-muted/60 focus:border-ember focus:outline-none"
+        className="w-full resize-y rounded-lg border border-edge bg-surface/70 p-3 font-mono text-sm text-cream placeholder:text-muted/60 focus:border-accent focus:outline-none"
       />
 
       <div className="mt-4">
@@ -78,7 +78,7 @@ export function SupportReply() {
 
             <div>
               <div className="mb-2 flex items-center gap-2">
-                <Badge tone="ember">Compliant</Badge>
+                <Badge tone="accent">Compliant</Badge>
                 <span className="font-mono text-[11px] uppercase tracking-wider text-muted">
                   Compliance & tone check
                 </span>
@@ -86,7 +86,7 @@ export function SupportReply() {
               <ul className="space-y-1.5">
                 {state.data.notes.map((n, i) => (
                   <li key={i} className="flex gap-2 text-sm text-muted">
-                    <span className="text-ember">✓</span>
+                    <span className="text-accent">✓</span>
                     <span>{n}</span>
                   </li>
                 ))}

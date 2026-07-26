@@ -24,7 +24,7 @@ export function DemoResultArea({
         <>
           {source === "fallback" && <FallbackNote reason={reason || ""} />}
           {source === "live" && (
-            <p className="mb-3 font-mono text-[11px] uppercase tracking-wider text-ember">● Live Claude response</p>
+            <p className="mb-3 font-mono text-[11px] uppercase tracking-wider text-accent">● Live Claude response</p>
           )}
           {children}
         </>

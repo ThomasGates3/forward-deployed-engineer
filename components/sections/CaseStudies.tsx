@@ -12,15 +12,15 @@ export function CaseStudies() {
         {caseStudies.map((c) => (
           <StaggerItem key={c.slug}>
             <Link href={`/case-studies/${c.slug}`}>
-              <Card className="group flex h-full flex-col p-6 transition hover:border-ember/50">
-                <h3 className="font-display text-xl text-cream group-hover:text-ember">{c.title}</h3>
+              <Card className="group flex h-full flex-col p-6 transition hover:border-accent/50">
+                <h3 className="font-display text-xl text-cream group-hover:text-accent">{c.title}</h3>
                 <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">{c.tagline}</p>
                 <div className="mt-4 flex flex-wrap gap-1.5">
                   {c.stack.slice(0, 3).map((s) => (
                     <Badge key={s}>{s}</Badge>
                   ))}
                 </div>
-                <span className="mt-4 font-mono text-xs text-ember">Read case study →</span>
+                <span className="mt-4 font-mono text-xs text-accent">Read case study →</span>
               </Card>
             </Link>
           </StaggerItem>

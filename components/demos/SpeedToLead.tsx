@@ -23,7 +23,7 @@ export function SpeedToLead() {
   const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const field =
-    "w-full rounded-lg border border-edge bg-surface/60 px-3 py-2.5 font-mono text-sm text-cream placeholder:text-muted focus:border-ember focus:outline-none";
+    "w-full rounded-lg border border-edge bg-surface/60 px-3 py-2.5 font-mono text-sm text-cream placeholder:text-muted focus:border-accent focus:outline-none";
 
   return (
     <div>
@@ -79,7 +79,7 @@ export function SpeedToLead() {
         {state.status === "done" && (
           <div className="space-y-5">
             <div className="flex flex-wrap items-center gap-3">
-              <Badge tone="ember">
+              <Badge tone="accent">
                 {state.data.verdict} · {state.data.score}/100
               </Badge>
             </div>
@@ -102,7 +102,7 @@ export function SpeedToLead() {
                 {state.data.followupEmail}
               </div>
               {state.data.emailSent && (
-                <p className="mt-2 font-mono text-xs text-ember">
+                <p className="mt-2 font-mono text-xs text-accent">
                   ✓ Real email sent to {email}
                 </p>
               )}
@@ -117,7 +117,7 @@ export function SpeedToLead() {
                   <span className="font-mono text-[10px] text-muted">Messages</span>
                   <Badge tone="amber">Simulated delivery</Badge>
                 </div>
-                <div className="rounded-2xl rounded-bl-md bg-ember/15 px-3.5 py-2.5 text-sm text-cream">
+                <div className="rounded-2xl rounded-bl-md bg-accent/15 px-3.5 py-2.5 text-sm text-cream">
                   {state.data.sms}
                 </div>
                 <p className="mt-2 px-1 font-mono text-[10px] text-muted">

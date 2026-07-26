@@ -120,7 +120,7 @@ export function AgentDesigner() {
         onChange={(e) => setDescription(e.target.value)}
         placeholder="Describe what you want your AI agent to do…"
         rows={4}
-        className="w-full rounded-lg border border-edge bg-surface/70 p-3 font-mono text-sm text-cream placeholder:text-muted focus:border-ember focus:outline-none"
+        className="w-full rounded-lg border border-edge bg-surface/70 p-3 font-mono text-sm text-cream placeholder:text-muted focus:border-accent focus:outline-none"
       />
       <div className="mt-3">
         <Button
@@ -152,7 +152,7 @@ export function AgentDesigner() {
               <ul className="space-y-2">
                 {state.data.tools.map((tool, i) => (
                   <li key={i} className="flex gap-2 font-mono text-sm text-cream">
-                    <span className="text-ember">▸</span>
+                    <span className="text-accent">▸</span>
                     <span>{tool}</span>
                   </li>
                 ))}

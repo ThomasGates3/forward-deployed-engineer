@@ -47,7 +47,7 @@ export function ThinkingBar() {
   return (
     <div className="h-1 w-full overflow-hidden rounded-full bg-edge">
       <motion.div
-        className="h-full w-1/3 rounded-full bg-ember"
+        className="h-full w-1/3 rounded-full bg-accent"
         animate={{ x: ["-120%", "320%"] }}
         transition={{ repeat: Infinity, duration: 1.1, ease: "easeInOut" }}
       />

@@ -8,6 +8,7 @@ export type CaseStudy = {
   architecture: string[];
   outcome: string;
   demo?: { label: string; href: string };
+  liveDemo?: "speed-to-lead" | "optimistic-os";
 };
 
 export const caseStudies: CaseStudy[] = [
@@ -32,7 +33,7 @@ export const caseStudies: CaseStudy[] = [
     ],
     outcome:
       "Leads get a qualified, personalized response in seconds instead of hours, and the team gets the AI's reasoning attached to every one — so they trust it and act on it. The live demo on this site is the same qualify-and-draft loop, wired to send you a real email.",
-    demo: { label: "Try the live Speed-to-Lead demo", href: "/#gallery" },
+    liveDemo: "speed-to-lead",
   },
   {
     slug: "optimistic-os",
@@ -53,7 +54,8 @@ export const caseStudies: CaseStudy[] = [
       "Research → image gen → Etsy listing → Pinterest scheduling, orchestrated as a sequence with checkpoints.",
     ],
     outcome:
-      "The repetitive path from idea to a live, marketed product runs without manual intervention, freeing the operator to focus on judgment and strategy. It's a concrete demonstration of multi-agent orchestration doing real operational work.",
+      "The repetitive path from idea to a live, marketed product runs without manual intervention, freeing the operator to focus on judgment and strategy. It's a concrete demonstration of multi-agent orchestration doing real operational work. Run the live six-agent pipeline below.",
+    liveDemo: "optimistic-os",
   },
 ];
 

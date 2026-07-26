@@ -7,8 +7,8 @@ export function Button({
   const base =
     "inline-flex items-center justify-center gap-2 rounded-lg px-4 min-h-[44px] font-mono text-sm tracking-tight transition disabled:opacity-40 disabled:cursor-not-allowed";
   const styles = {
-    solid: "bg-ember text-ink hover:bg-ember-soft shadow-glow",
-    outline: "border border-edge text-cream hover:border-ember hover:text-ember",
+    solid: "bg-accent text-ink hover:bg-accent-soft shadow-glow",
+    outline: "border border-edge text-cream hover:border-accent hover:text-accent",
     ghost: "text-muted hover:text-cream",
   }[variant];
   return (
@@ -26,10 +26,10 @@ export function Card({ className = "", children }: { className?: string; childre
   );
 }
 
-export function Badge({ children, tone = "edge" }: { children: React.ReactNode; tone?: "edge" | "ember" | "amber" }) {
+export function Badge({ children, tone = "edge" }: { children: React.ReactNode; tone?: "edge" | "accent" | "amber" }) {
   const styles = {
     edge: "border-edge text-muted",
-    ember: "border-ember/40 text-ember bg-ember/10",
+    accent: "border-accent/40 text-accent bg-accent/10",
     amber: "border-amber-500/40 text-amber-300 bg-amber-500/10",
   }[tone];
   return (

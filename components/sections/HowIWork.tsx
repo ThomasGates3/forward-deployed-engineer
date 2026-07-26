@@ -11,13 +11,13 @@ const steps = [
 
 export function HowIWork() {
   return (
-    <section className="container-x py-20 md:py-28">
+    <section id="how" className="container-x py-20 md:py-28">
       <SectionHeading eyebrow="How I work" title="Discovery → build → deploy → measure." />
       <Stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {steps.map((s) => (
           <StaggerItem key={s.n}>
             <div className="rounded-xl border border-edge p-5">
-              <span className="font-mono text-sm text-ember">{s.n}</span>
+              <span className="font-mono text-sm text-accent">{s.n}</span>
               <h3 className="mt-2 font-display text-lg text-cream">{s.t}</h3>
               <p className="mt-2 text-sm text-muted">{s.d}</p>
             </div>

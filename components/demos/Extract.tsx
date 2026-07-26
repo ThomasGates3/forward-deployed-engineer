@@ -44,7 +44,7 @@ export function Extract() {
     <div>
       <p className="mb-3 font-mono text-xs text-muted">
         The integration wall: unstructured mess in{" "}
-        <span className="text-ember">→</span> clean structured JSON out.
+        <span className="text-accent">→</span> clean structured JSON out.
       </p>
 
       <textarea
@@ -52,7 +52,7 @@ export function Extract() {
         onChange={(e) => setText(e.target.value)}
         placeholder="Paste a messy invoice, note, or jumbled data…"
         rows={10}
-        className="w-full rounded-lg border border-edge bg-surface/70 p-3 font-mono text-xs leading-relaxed text-cream placeholder:text-muted focus:border-ember focus:outline-none"
+        className="w-full rounded-lg border border-edge bg-surface/70 p-3 font-mono text-xs leading-relaxed text-cream placeholder:text-muted focus:border-accent focus:outline-none"
       />
 
       <div className="mt-3 flex flex-wrap items-center gap-3">
@@ -93,7 +93,7 @@ export function Extract() {
                 <tbody>
                   {state.data.fields.map((f, i) => (
                     <tr key={i} className="border-b border-edge/50 last:border-0">
-                      <td className="whitespace-nowrap px-4 py-2 text-ember">{f.key}</td>
+                      <td className="whitespace-nowrap px-4 py-2 text-accent">{f.key}</td>
                       <td className="px-4 py-2 text-cream">{f.value}</td>
                     </tr>
                   ))}

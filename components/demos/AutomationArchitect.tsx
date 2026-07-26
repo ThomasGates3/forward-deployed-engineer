@@ -14,7 +14,7 @@ function toPlainText(w: Workflow): string {
 function Arrow() {
   return (
     <div className="flex justify-center py-1" aria-hidden>
-      <span className="font-mono text-lg leading-none text-ember/60">↓</span>
+      <span className="font-mono text-lg leading-none text-accent/60">↓</span>
     </div>
   );
 }
@@ -49,7 +49,7 @@ export function AutomationArchitect() {
         onChange={(e) => setProcess(e.target.value)}
         placeholder="Describe a business process in a sentence or two…"
         rows={3}
-        className="w-full rounded-lg border border-edge bg-surface/70 p-3 font-mono text-sm text-cream placeholder:text-muted focus:border-ember focus:outline-none"
+        className="w-full rounded-lg border border-edge bg-surface/70 p-3 font-mono text-sm text-cream placeholder:text-muted focus:border-accent focus:outline-none"
       />
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <Button onClick={() => run({ process })} disabled={loading || !process.trim()}>
@@ -73,9 +73,9 @@ export function AutomationArchitect() {
         {state.status === "done" && (
           <div className="space-y-4">
             <div className="mx-auto max-w-md">
-              {/* Trigger box — ember-accented */}
-              <div className="rounded-xl border border-ember/50 bg-ember/10 p-4 shadow-glow">
-                <p className="mb-1 font-mono text-[10px] uppercase tracking-wider text-ember">● Trigger</p>
+              {/* Trigger box — accent-accented */}
+              <div className="rounded-xl border border-accent/50 bg-accent/10 p-4 shadow-glow">
+                <p className="mb-1 font-mono text-[10px] uppercase tracking-wider text-accent">● Trigger</p>
                 <p className="text-sm text-cream">{state.data.trigger}</p>
               </div>
 

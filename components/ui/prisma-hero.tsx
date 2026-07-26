@@ -161,7 +161,7 @@ const PrismaHero = () => {
           </div>
         </div>
 
-        {/* CTA anchored to the bottom-right corner — covers the video watermark */}
+        {/* CTA anchored to the bottom-right corner */}
         <motion.a
           href="#gallery"
           initial={{ y: 20, opacity: 0 }}

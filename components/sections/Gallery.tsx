@@ -8,14 +8,14 @@ export function Gallery() {
   return (
     <section id="gallery" className="container-x py-20 md:py-28">
       <SectionHeading
-        eyebrow="Live gallery"
-        title="Five working AI tools. Each in its own world."
-        sub="Every tool is a real server-side Claude call, rate-limited and free to try — and each opens as its own fully-themed experience. Hit a limit and it gracefully shows a saved example, never a broken state."
+        eyebrow="Projects"
+        title="Working AI tools you can use right now."
+        sub="Not screenshots — real, live projects. Each is a server-side Claude call, rate-limited and free to try, and opens as its own fully-themed experience. Hit a limit and it gracefully shows a saved example, never a broken state."
       />
       <Stagger className="grid gap-5 md:grid-cols-2">
         {demos.map((d) => (
           <StaggerItem key={d.id}>
-            <Link href={`/tools/${d.id}`} className="block h-full">
+            <Link href={d.href ?? `/tools/${d.id}`} className="block h-full">
               <Card className="group h-full p-6 transition hover:border-accent/50">
                 <div className="flex items-start justify-between gap-3">
                   <div>

@@ -1,4 +1,4 @@
-export type DemoMeta = { id: string; name: string; value: string; flagship?: boolean };
+export type DemoMeta = { id: string; name: string; value: string; flagship?: boolean; href?: string };
 
 export const demos: DemoMeta[] = [
   { id: "agent-designer", name: "AI Agent Designer", value: "Describe an agent in plain English → get a production system prompt + tools, exportable as a Claude Code skill or n8n workflow.", flagship: true },
@@ -6,4 +6,5 @@ export const demos: DemoMeta[] = [
   { id: "support-reply", name: "Support Reply Generator", value: "Pick a scenario or paste a customer message → a clear, on-brand support reply with a built-in tone & quality check." },
   { id: "extract", name: "Messy Doc → Structured Data", value: "Paste any messy text — invoice, note, jumble — and get clean structured JSON rendered as a table." },
   { id: "automation-architect", name: "Automation Architect", value: "Describe a business process in a sentence → a legible trigger → steps → logic workflow you can copy." },
+  { id: "optimistic-os", name: "Optimistic OS", value: "Run a live six-agent pipeline: trend research → concept → image → listing → marketing, each agent handing off to the next.", flagship: true, href: "/case-studies/optimistic-os" },
 ];

@@ -61,6 +61,44 @@ export default function Page() {
         </section>
 
         <SpeedToLeadTool />
+
+        {/* The story */}
+        <section className="mt-20 border-t border-slate-200 pt-12">
+          <h2
+            className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl"
+            style={{ fontFamily: "var(--font-sora), sans-serif" }}
+          >
+            The story behind it
+          </h2>
+          <div className="mt-8 grid gap-8 sm:grid-cols-3">
+            {[
+              {
+                h: "Problem",
+                p: "Inbound leads go cold fast — response time is the single biggest predictor of conversion, yet most teams reply in hours. Good leads sit in an inbox while a rep is heads-down elsewhere.",
+              },
+              {
+                h: "What I built",
+                p: "An event-driven pipeline that fires the instant a lead lands: Claude qualifies it (scoring intent and fit with real reasoning, not a yes/no), then auto-drafts an on-brand email and a first-touch SMS. A dashboard shows every lead, its score, and what was sent.",
+              },
+              {
+                h: "Outcome",
+                p: "Leads get a qualified, personalized response in seconds instead of hours, with the AI's reasoning attached to each one so the team trusts and acts on it. The demo above is that same qualify-and-draft loop, wired to email you for real.",
+              },
+            ].map((b) => (
+              <div key={b.h} className="rounded-2xl border border-slate-200 bg-white/70 p-6 backdrop-blur">
+                <p className="text-xs font-bold uppercase tracking-widest text-indigo-600">{b.h}</p>
+                <p className="mt-3 text-sm leading-relaxed text-slate-600">{b.p}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 flex flex-wrap gap-2">
+            {["Claude API", "Vertex AI", "Twilio", "Resend", "Next.js"].map((t) => (
+              <span key={t} className="rounded-full border border-slate-200 bg-white/60 px-3 py-1 text-xs font-semibold text-slate-500">
+                {t}
+              </span>
+            ))}
+          </div>
+        </section>
       </div>
     </main>
   );

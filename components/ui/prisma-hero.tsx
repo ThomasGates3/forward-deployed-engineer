@@ -84,8 +84,8 @@ export const WordsPullUpMultiStyle = ({ segments, className = "", style }: Words
 /* ---------------- Hero ----------------
    Customized from the Prisma template: FDE nav, real name/scene, working CTA. */
 const navItems: { label: string; href: string; download?: boolean }[] = [
-  { label: "Live gallery", href: "#gallery" },
-  { label: "Case studies", href: "#work" },
+  { label: "Projects", href: "#gallery" },
+  { label: "How I work", href: "#how" },
   { label: "Resume", href: "/resume" },
   { label: "Contact", href: "#contact" },
 ];

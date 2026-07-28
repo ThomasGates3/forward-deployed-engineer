@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { ExternalLink } from "lucide-react";
 import { demos } from "@/content/gallery";
 import { Card, Badge, SectionHeading, Button } from "@/components/ui";
 import { Stagger, StaggerItem } from "@/components/motion";
@@ -15,17 +16,24 @@ export function Gallery() {
       <Stagger className="grid gap-5 md:grid-cols-2">
         {demos.map((d) => (
           <StaggerItem key={d.id}>
-            <Link href={d.href ?? `/tools/${d.id}`} className="block h-full">
+            <Link
+              href={d.href ?? `/tools/${d.id}`}
+              className="block h-full"
+              {...(d.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+            >
               <Card className="group h-full p-6 transition hover:border-accent/50">
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <div className="mb-2 flex items-center gap-2">
                       <h3 className="font-display text-xl text-cream group-hover:text-accent">{d.name}</h3>
                       {d.flagship && <Badge tone="accent">Flagship</Badge>}
+                      {d.external && <Badge>Live app</Badge>}
                     </div>
                     <p className="max-w-lg text-sm leading-relaxed text-muted">{d.value}</p>
                   </div>
-                  <Button variant="outline" className="pointer-events-none shrink-0">Try it →</Button>
+                  <Button variant="outline" className="pointer-events-none shrink-0 gap-1.5">
+                    Try it {d.external ? <ExternalLink className="h-3.5 w-3.5" /> : "→"}
+                  </Button>
                 </div>
               </Card>
             </Link>

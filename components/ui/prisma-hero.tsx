@@ -2,6 +2,7 @@
 import { motion, useInView } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { useRef } from "react";
+import { LiquidButton } from "@/components/ui/liquid-glass-button";
 
 /* ---------------- WordsPullUp ---------------- */
 interface WordsPullUpProps {
@@ -147,33 +148,34 @@ const PrismaHero = () => {
               </motion.p>
             </div>
 
-            <div className="col-span-12 flex flex-col gap-5 pb-20 lg:col-span-4 lg:pb-24">
+            <div className="col-span-12 flex flex-col gap-5 pb-28 lg:col-span-4 lg:pb-40">
               <motion.p
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                className="max-w-sm text-sm leading-snug text-cream/80 md:text-base"
+                className="ml-auto max-w-xs text-right text-sm leading-snug text-cream/80 md:text-base"
               >
-                Forward deployed engineer embedding with teams to ship AI into production. Everything
-                below is a live, working tool — not a screenshot. Try one.
+                I build AI systems that collapse hours of busywork into seconds. Not demos,
+                production. Everything below runs live.
               </motion.p>
             </div>
           </div>
         </div>
 
         {/* CTA anchored to the bottom-right corner */}
-        <motion.a
-          href="#gallery"
+        <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="group absolute bottom-4 right-4 z-20 inline-flex items-center gap-2 rounded-full bg-cream py-1 pl-5 pr-1 text-sm font-medium text-ink shadow-lg transition-all hover:gap-3 sm:bottom-6 sm:right-6"
+          className="absolute bottom-20 right-4 z-20 sm:bottom-28 sm:right-6"
         >
-          View projects
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-accent transition-transform group-hover:scale-110 sm:h-10 sm:w-10">
-            <ArrowRight className="h-4 w-4 text-ink" />
-          </span>
-        </motion.a>
+          <LiquidButton href="#gallery" size="xxl" className="group gap-5 pl-12 pr-2.5 sm:text-2xl">
+            View projects
+            <span className="flex h-[3.4rem] w-[3.4rem] items-center justify-center rounded-full bg-accent transition-transform group-hover:scale-110 sm:h-[3.75rem] sm:w-[3.75rem]">
+              <ArrowRight className="h-7 w-7 text-ink" />
+            </span>
+          </LiquidButton>
+        </motion.div>
       </div>
     </section>
   );

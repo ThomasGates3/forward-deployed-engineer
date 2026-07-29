@@ -15,13 +15,13 @@ export default function Page() {
         <Link
           href="/"
           data-testid="back-link"
-          className="inline-flex min-h-[44px] items-center gap-2 text-sm text-muted transition hover:text-accent"
+          className="inline-flex min-h-[44px] items-center gap-2 text-sm text-muted transition hover:text-[#F2C94C]"
         >
           ← Back to portfolio
         </Link>
 
         <header className="mt-8">
-          <p className="eyebrow mb-3 font-mono text-[11px] uppercase tracking-[0.25em] text-accent">
+          <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.25em] text-[#D4AF37]">
             Ops Copilot
           </p>
           <h1 className="font-display text-section text-cream">

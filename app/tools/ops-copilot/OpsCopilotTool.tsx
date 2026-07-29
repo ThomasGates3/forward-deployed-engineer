@@ -143,7 +143,7 @@ export default function OpsCopilotTool() {
                 key={ex}
                 data-testid="example-prompt"
                 onClick={() => send(ex)}
-                className="min-h-[44px] rounded-lg border border-edge px-3 py-2 text-left text-sm text-cream transition hover:border-accent hover:text-accent"
+                className="min-h-[44px] rounded-lg border border-edge px-3 py-2 text-left text-sm text-cream transition hover:border-[#D4AF37] hover:text-[#F2C94C]"
               >
                 {ex}
               </button>
@@ -159,15 +159,16 @@ export default function OpsCopilotTool() {
               <div
                 data-testid={ev.role === "user" ? "user-bubble" : "assistant-bubble"}
                 className={`max-w-[85%] rounded-xl px-4 py-2.5 text-sm leading-relaxed ${
-                  ev.role === "user" ? "ml-auto bg-accent text-ink" : "bg-surface text-cream border border-edge"
+                  ev.role === "user" ? "ml-auto text-ink" : "bg-surface text-cream border border-edge"
                 }`}
+                style={ev.role === "user" ? { backgroundColor: "#D4AF37" } : undefined}
               >
                 {ev.content}
               </div>
             )}
             {ev.kind === "tool" && (
               <div data-testid="tool-call" className="rounded-lg border border-edge bg-black/30 p-3 font-mono text-xs">
-                <div className="flex items-center gap-2 text-accent">
+                <div className="flex items-center gap-2 text-[#D4AF37]">
                   <span>🔧</span>
                   <span>
                     {ev.call.tool}({JSON.stringify(ev.call.input)})
@@ -194,17 +195,27 @@ export default function OpsCopilotTool() {
                 </p>
                 {!ev.resolved ? (
                   <div className="flex gap-2">
-                    <Button data-testid="confirm-btn" onClick={() => resolveConfirmation(true)}>
+                    <Button
+                      data-testid="confirm-btn"
+                      onClick={() => resolveConfirmation(true)}
+                      className="text-ink hover:brightness-110"
+                      style={{ backgroundColor: "#D4AF37", boxShadow: "0 8px 26px rgba(212,175,55,0.28)" }}
+                    >
                       Confirm
                     </Button>
                     <Button data-testid="cancel-btn" variant="outline" onClick={() => resolveConfirmation(false)}>
                       Cancel
                     </Button>
                   </div>
+                ) : ev.resolved === "confirmed" ? (
+                  <span
+                    className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-[11px] uppercase tracking-wider"
+                    style={{ borderColor: "rgba(212,175,55,0.4)", color: "#F2C94C", backgroundColor: "rgba(212,175,55,0.1)" }}
+                  >
+                    Confirmed
+                  </span>
                 ) : (
-                  <Badge tone={ev.resolved === "confirmed" ? "accent" : "edge"}>
-                    {ev.resolved === "confirmed" ? "Confirmed" : "Cancelled"}
-                  </Badge>
+                  <Badge tone="edge">Cancelled</Badge>
                 )}
               </div>
             )}
@@ -230,9 +241,15 @@ export default function OpsCopilotTool() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ask about an order, SKU, or request a refund…"
-          className="min-h-[44px] flex-1 rounded-lg border border-edge bg-black/30 px-3 text-sm text-cream placeholder:text-muted focus:border-accent focus:outline-none"
+          className="min-h-[44px] flex-1 rounded-lg border border-edge bg-black/30 px-3 text-sm text-cream placeholder:text-muted focus:border-[#D4AF37] focus:outline-none"
         />
-        <Button type="submit" data-testid="send-btn" disabled={loading || !input.trim()}>
+        <Button
+          type="submit"
+          data-testid="send-btn"
+          disabled={loading || !input.trim()}
+          className="text-ink hover:brightness-110 disabled:hover:brightness-100"
+          style={{ backgroundColor: "#D4AF37", boxShadow: "0 8px 26px rgba(212,175,55,0.28)" }}
+        >
           Send
         </Button>
       </form>

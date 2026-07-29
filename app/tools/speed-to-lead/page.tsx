@@ -6,7 +6,7 @@ const sora = Sora({ subsets: ["latin"], weight: ["600", "700", "800"], variable:
 const inter = Inter({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-inter" });
 
 export const metadata = {
-  title: "Speed to Lead — AI Lead Qualification",
+  title: "Speed to Lead: AI Lead Qualification",
   description: "Send yourself a fake inbound lead and watch it get qualified live.",
 };
 
@@ -56,7 +56,7 @@ export default function Page() {
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg">
             Pose as a prospect landing in the inbox. In seconds an AI SDR scores fit and
             intent, explains its reasoning, and drafts a follow-up email plus a first-touch
-            text — the way a real CRM should the instant a lead hits.
+            text, the way a real CRM should the instant a lead hits.
           </p>
         </section>
 
@@ -74,7 +74,7 @@ export default function Page() {
             {[
               {
                 h: "Problem",
-                p: "Inbound leads go cold fast — response time is the single biggest predictor of conversion, yet most teams reply in hours. Good leads sit in an inbox while a rep is heads-down elsewhere.",
+                p: "Inbound leads go cold fast. Response time is the single biggest predictor of conversion, yet most teams reply in hours. Good leads sit in an inbox while a rep is heads-down elsewhere.",
               },
               {
                 h: "What I built",

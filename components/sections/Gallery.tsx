@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import { demos } from "@/content/gallery";
-import { Card, Badge, SectionHeading, Button } from "@/components/ui";
+import { Card, SectionHeading, Button } from "@/components/ui";
 import { Stagger, StaggerItem } from "@/components/motion";
 
 export function Gallery() {
@@ -26,8 +26,6 @@ export function Gallery() {
                   <div>
                     <div className="mb-2 flex items-center gap-2">
                       <h3 className="font-display text-xl text-cream group-hover:text-accent">{d.name}</h3>
-                      {d.flagship && <Badge tone="accent">Flagship</Badge>}
-                      {d.external && <Badge>Live app</Badge>}
                     </div>
                     <p className="max-w-lg text-sm leading-relaxed text-muted">{d.value}</p>
                   </div>

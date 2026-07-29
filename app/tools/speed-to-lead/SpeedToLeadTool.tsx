@@ -92,7 +92,7 @@ export default function SpeedToLeadTool() {
     setEmailErr("");
     setError("");
     if (!EMAIL_RE.test(email)) {
-      setEmailErr("That doesn't look like a valid email — use a real address so you can see the follow-up.");
+      setEmailErr("That doesn't look like a valid email. Use a real address so you can see the follow-up.");
       return;
     }
     setLoading(true);
@@ -114,7 +114,7 @@ export default function SpeedToLeadTool() {
       }
       setResult({ source: json.source, data: json.data });
     } catch {
-      setError("Network error — please try again.");
+      setError("Network error. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -150,7 +150,7 @@ export default function SpeedToLeadTool() {
           Pose as the lead
         </h2>
         <p className="mt-1 text-sm text-slate-500">
-          Use your real email — if live, the drafted follow-up actually lands in your inbox.
+          Use your real email. If live, the drafted follow-up actually lands in your inbox.
         </p>
 
         <div className="mt-5 space-y-4">
@@ -190,7 +190,7 @@ export default function SpeedToLeadTool() {
               className={`${inputCls} min-h-[110px] resize-y`}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              placeholder="Hi — we're a 40-person logistics startup drowning in manual ops. Can AI help us automate dispatch? Hoping to move fast this quarter."
+              placeholder="Hi, we're a 40-person logistics startup drowning in manual ops. Can AI help us automate dispatch? Hoping to move fast this quarter."
             />
           </div>
         </div>
@@ -225,7 +225,7 @@ export default function SpeedToLeadTool() {
             >
               <div className="text-4xl">📈</div>
               <p className="mt-3 max-w-xs text-sm text-slate-500">
-                Submit the form and your lead flows through the pipeline — scored, explained,
+                Submit the form and your lead flows through the pipeline, scored, explained,
                 and ready to work.
               </p>
             </motion.div>
@@ -268,7 +268,7 @@ export default function SpeedToLeadTool() {
                   data-testid="fallback-note"
                   className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-800"
                 >
-                  Example output — the live model is unavailable right now, so this is a
+                  Example output. The live model is unavailable right now, so this is a
                   representative sample of what qualification looks like.
                 </div>
               )}
@@ -375,7 +375,7 @@ export default function SpeedToLeadTool() {
                   </div>
                 </div>
                 <p className="mt-4 text-center text-xs text-slate-400">
-                  This text is a preview only — no real SMS is sent.
+                  This text is a preview only. No real SMS is sent.
                 </p>
               </div>
             </motion.div>

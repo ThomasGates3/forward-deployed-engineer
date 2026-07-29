@@ -22,14 +22,24 @@ export default function Page() {
         <header className="mt-8 max-w-2xl">
           <p className="eyebrow mb-3 font-mono text-[11px] uppercase tracking-wider text-accent">Eval-driven development</p>
           <h1 className="font-display text-section text-cream">
-            Evals: test the AI before you ship it
+            The QA layer behind the IAM Policy Generator
           </h1>
           <p className="mt-4 text-muted">
-            This suite runs 8 fixed, hardcoded IAM-policy requests through Claude and grades every generated
-            policy against explicit, deterministic rules: no wildcard resources, no wildcard actions, valid
-            JSON, correctly scoped to the requested service. That&apos;s the difference between prompt-and-hope
-            and eval-driven AI development. A fixed rubric, run every time, tells you whether the model&apos;s
-            output is actually safe to ship, not just whether it looks plausible.
+            This is what I actually ran before shipping the{" "}
+            <a
+              href="https://ai-powered-iam.vercel.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent"
+            >
+              AI-Powered IAM Policy Generator
+            </a>
+            . Pressing Run below regenerates 8 fixed, real-world IAM requests through the same model and
+            grades every resulting policy against explicit, deterministic rules: no wildcard resources, no
+            wildcard actions, valid JSON, correctly scoped to the requested service. That&apos;s the
+            difference between prompt-and-hope and eval-driven AI development. A fixed rubric, run every
+            time, tells you whether the model&apos;s output is actually safe to ship, not just whether it
+            looks plausible.
           </p>
         </header>
 

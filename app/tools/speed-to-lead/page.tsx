@@ -17,22 +17,22 @@ export default function Page() {
       style={{
         fontFamily: "var(--font-inter), system-ui, sans-serif",
         background:
-          "radial-gradient(1200px 600px at 15% -10%, #dbeafe 0%, transparent 55%), radial-gradient(1000px 500px at 100% 0%, #ede9fe 0%, transparent 50%), linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%)",
-        color: "#0f172a",
+          "radial-gradient(1200px 600px at 15% -10%, #fef3c7 0%, transparent 55%), radial-gradient(1000px 500px at 100% 0%, #fee2e2 0%, transparent 50%), linear-gradient(180deg, #fffbeb 0%, #fff1f0 100%)",
+        color: "#1c1917",
       }}
     >
       <div className="mx-auto w-full max-w-5xl px-5 pb-24 pt-6 sm:px-8">
         <Link
           href="/"
           data-testid="back-link"
-          className="inline-flex min-h-[44px] items-center gap-2 rounded-full px-4 text-sm font-semibold text-slate-600 transition hover:bg-white/70 hover:text-slate-900"
+          className="inline-flex min-h-[44px] items-center gap-2 rounded-full px-4 text-sm font-semibold text-stone-600 transition hover:bg-white/70 hover:text-stone-900"
         >
           ← Back to portfolio
         </Link>
 
         <section className="mt-8 sm:mt-12">
           <span
-            className="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-white/70 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-indigo-600 backdrop-blur"
+            className="inline-flex items-center gap-2 rounded-full border border-red-200 bg-white/70 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-red-600 backdrop-blur"
             style={{ letterSpacing: "0.08em" }}
           >
             <span className="h-2 w-2 rounded-full bg-emerald-500" />
@@ -40,17 +40,18 @@ export default function Page() {
           </span>
 
           <h1
-            className="mt-5 text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl"
+            className="mt-5 whitespace-nowrap font-extrabold leading-[1.1] tracking-tight"
             style={{
               fontFamily: "var(--font-sora), sans-serif",
-              backgroundImage: "linear-gradient(100deg, #4f46e5 0%, #7c3aed 45%, #db2777 100%)",
+              fontSize: "clamp(1.35rem, 4.6vw, 2.6rem)",
+              backgroundImage: "linear-gradient(100deg, #dc2626 0%, #f59e0b 55%, #facc15 100%)",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
               color: "transparent",
             }}
           >
             Send yourself a fake inbound lead,
-            <br className="hidden sm:block" /> watch it get qualified live.
+            <br /> watch it get qualified live.
           </h1>
 
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg">
@@ -85,15 +86,15 @@ export default function Page() {
                 p: "Leads get a qualified, personalized response in seconds instead of hours, with the AI's reasoning attached to each one so the team trusts and acts on it. The demo above is that same qualify-and-draft loop, wired to email you for real.",
               },
             ].map((b) => (
-              <div key={b.h} className="rounded-2xl border border-slate-200 bg-white/70 p-6 backdrop-blur">
-                <p className="text-xs font-bold uppercase tracking-widest text-indigo-600">{b.h}</p>
-                <p className="mt-3 text-sm leading-relaxed text-slate-600">{b.p}</p>
+              <div key={b.h} className="rounded-2xl border border-stone-200 bg-white/70 p-6 backdrop-blur">
+                <p className="text-xs font-bold uppercase tracking-widest text-red-600">{b.h}</p>
+                <p className="mt-3 text-sm leading-relaxed text-stone-600">{b.p}</p>
               </div>
             ))}
           </div>
           <div className="mt-8 flex flex-wrap gap-2">
             {["Claude API", "Vertex AI", "Twilio", "Resend", "Next.js"].map((t) => (
-              <span key={t} className="rounded-full border border-slate-200 bg-white/60 px-3 py-1 text-xs font-semibold text-slate-500">
+              <span key={t} className="rounded-full border border-stone-200 bg-white/60 px-3 py-1 text-xs font-semibold text-stone-500">
                 {t}
               </span>
             ))}

@@ -132,7 +132,7 @@ export default function SpeedToLeadTool() {
   }
 
   const inputCls =
-    "w-full min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100";
+    "w-full min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-red-400 focus:ring-4 focus:ring-red-100";
 
   return (
     <div className="mt-10 grid gap-6 lg:grid-cols-[420px_1fr]">
@@ -141,7 +141,7 @@ export default function SpeedToLeadTool() {
         onSubmit={submit}
         noValidate
         data-testid="lead-form"
-        className="h-fit rounded-3xl border border-white bg-white/80 p-6 shadow-[0_20px_60px_-25px_rgba(79,70,229,0.35)] backdrop-blur sm:p-7"
+        className="h-fit rounded-3xl border border-white bg-white/80 p-6 shadow-[0_20px_60px_-25px_rgba(220,38,38,0.35)] backdrop-blur sm:p-7"
       >
         <h2
           className="text-lg font-bold text-slate-900"
@@ -200,7 +200,7 @@ export default function SpeedToLeadTool() {
           data-testid="submit-btn"
           disabled={loading}
           className="mt-6 flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl px-5 text-base font-bold text-white shadow-lg transition active:scale-[0.99] disabled:opacity-60"
-          style={{ backgroundImage: "linear-gradient(100deg, #4f46e5, #7c3aed 55%, #db2777)" }}
+          style={{ backgroundImage: "linear-gradient(100deg, #dc2626, #f59e0b 55%, #facc15)" }}
         >
           {loading ? "Qualifying lead…" : "Qualify this lead →"}
         </button>
@@ -221,7 +221,7 @@ export default function SpeedToLeadTool() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="flex h-full min-h-[300px] flex-col items-center justify-center rounded-3xl border border-dashed border-indigo-200 bg-white/40 p-8 text-center"
+              className="flex h-full min-h-[300px] flex-col items-center justify-center rounded-3xl border border-dashed border-red-200 bg-white/40 p-8 text-center"
             >
               <div className="text-4xl">📈</div>
               <p className="mt-3 max-w-xs text-sm text-slate-500">
@@ -243,7 +243,7 @@ export default function SpeedToLeadTool() {
                 {[0, 1, 2].map((i) => (
                   <motion.span
                     key={i}
-                    className="h-3 w-3 rounded-full bg-indigo-500"
+                    className="h-3 w-3 rounded-full bg-red-500"
                     animate={{ y: [0, -8, 0], opacity: [0.4, 1, 0.4] }}
                     transition={{ duration: 0.8, repeat: Infinity, delay: i * 0.15 }}
                   />
@@ -274,7 +274,7 @@ export default function SpeedToLeadTool() {
               )}
 
               {/* Score + verdict card */}
-              <div className="flex flex-col items-center gap-6 rounded-3xl border border-white bg-white/85 p-6 shadow-[0_20px_60px_-25px_rgba(79,70,229,0.35)] backdrop-blur sm:flex-row sm:p-8">
+              <div className="flex flex-col items-center gap-6 rounded-3xl border border-white bg-white/85 p-6 shadow-[0_20px_60px_-25px_rgba(220,38,38,0.35)] backdrop-blur sm:flex-row sm:p-8">
                 <Gauge score={result.data.score} />
                 <div className="text-center sm:text-left">
                   <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
@@ -306,7 +306,7 @@ export default function SpeedToLeadTool() {
               <div className="rounded-3xl border border-white bg-white/85 p-6 shadow-sm backdrop-blur">
                 <div className="flex items-center gap-2">
                   <span className="text-lg">🧠</span>
-                  <h4 className="text-sm font-bold uppercase tracking-wider text-indigo-600">
+                  <h4 className="text-sm font-bold uppercase tracking-wider text-red-600">
                     AI reasoning
                   </h4>
                 </div>
@@ -320,14 +320,14 @@ export default function SpeedToLeadTool() {
                 <div className="flex items-center justify-between gap-3">
                   <div className="flex items-center gap-2">
                     <span className="text-lg">✉️</span>
-                    <h4 className="text-sm font-bold uppercase tracking-wider text-indigo-600">
+                    <h4 className="text-sm font-bold uppercase tracking-wider text-red-600">
                       Drafted follow-up email
                     </h4>
                   </div>
                   <button
                     onClick={copyEmail}
                     data-testid="copy-email"
-                    className="min-h-[44px] rounded-lg border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 transition hover:border-indigo-300 hover:text-indigo-600 active:scale-95"
+                    className="min-h-[44px] rounded-lg border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 transition hover:border-red-300 hover:text-red-600 active:scale-95"
                   >
                     {copied ? "✓ Copied" : "Copy"}
                   </button>
@@ -344,7 +344,7 @@ export default function SpeedToLeadTool() {
               <div className="rounded-3xl border border-white bg-white/85 p-6 shadow-sm backdrop-blur">
                 <div className="flex items-center gap-2">
                   <span className="text-lg">💬</span>
-                  <h4 className="text-sm font-bold uppercase tracking-wider text-indigo-600">
+                  <h4 className="text-sm font-bold uppercase tracking-wider text-red-600">
                     First-touch SMS
                   </h4>
                   <span className="ml-auto rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-500">
@@ -367,7 +367,7 @@ export default function SpeedToLeadTool() {
                         transition={{ delay: 0.3 }}
                         data-testid="sms-bubble"
                         className="max-w-[88%] rounded-2xl rounded-bl-sm px-4 py-2.5 text-[14px] leading-snug text-white"
-                        style={{ backgroundImage: "linear-gradient(135deg, #4f46e5, #7c3aed)" }}
+                        style={{ backgroundImage: "linear-gradient(135deg, #dc2626, #f59e0b)" }}
                       >
                         {result.data.sms}
                       </motion.div>

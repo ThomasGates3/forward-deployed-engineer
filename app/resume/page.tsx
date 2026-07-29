@@ -90,7 +90,7 @@ export default function ResumePage() {
         <Role
           org="Universal Technical Services"
           title="Security Engineer / IT Compliance Auditor"
-          dates="Jan 2021 – Feb 2026"
+          dates="Jan 2021 – May 2026"
           bullets={[
             "Automated patch management, system hardening, and access-management workflows with Python, PowerShell, and Bash, improving operational efficiency roughly 35% and building the scripting-into-production habits central to deployment work.",
             "Secured AWS and Azure environments with CSPM tooling, cutting critical vulnerabilities roughly 30%, and enforced least-privilege IAM and MFA across 40+ enterprise systems.",
@@ -125,11 +125,11 @@ export default function ResumePage() {
           ]}
         />
         <Role
-          org="Ops Copilot: Tool-Calling Agent"
-          title="Claude tool-use API · Next.js"
+          org="This Portfolio: Live AI Tool Suite"
+          title="Next.js 14 · TypeScript · Claude · Gemini · FastAPI · Vercel · Upstash"
           dates="2026"
           bullets={[
-            "Built a multi-turn agent using Claude's real tool-calling API against a live dataset, rendering every tool call inline and gating sensitive actions behind human confirmation.",
+            "Designed and shipped a live portfolio of production AI tools, including a cited RAG document Q&A system, a real Claude tool-calling agent with human-in-the-loop confirmation, and an eval suite grading AI output against deterministic rubrics, integrating Claude and Gemini across Next.js, FastAPI, and Vercel with shared rate limiting and graceful fallbacks.",
           ]}
         />
       </Section>

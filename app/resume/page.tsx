@@ -117,19 +117,19 @@ export default function ResumePage() {
 
       <Section title="Relevant Projects">
         <Role
-          org="Live AI Portfolio: Claude-Powered Tools"
-          title="Next.js 14 · TypeScript · Claude · Upstash · Vercel"
+          org="AI-Powered IAM Policy Generator"
+          title="TypeScript · Gemini · Vercel"
           dates="2026"
           bullets={[
-            "Shipped five live production LLM tools behind a shared rate-limiting and safety layer with graceful fallbacks, keeping API spend bounded.",
+            "Deployed a production app that turns plain-English requests into least-privilege AWS, GCP, and Azure IAM policies, with the model key held server-side and usage rate-limited.",
           ]}
         />
         <Role
-          org="Speed to Lead: Inbound Lead Automation"
-          title="Claude API · Vertex AI · Twilio · Resend · Next.js"
-          dates="2025"
+          org="Ops Copilot: Tool-Calling Agent"
+          title="Claude tool-use API · Next.js"
+          dates="2026"
           bullets={[
-            "Built an event-driven pipeline that qualifies inbound leads with an LLM and auto-drafts email and SMS follow-ups, cutting response time from hours to seconds.",
+            "Built a multi-turn agent using Claude's real tool-calling API against a live dataset, rendering every tool call inline and gating sensitive actions behind human confirmation.",
           ]}
         />
       </Section>

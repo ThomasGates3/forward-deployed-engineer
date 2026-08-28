@@ -7,8 +7,8 @@ const sans = Inter({ subsets: ["latin"], variable: "--font-sans" });
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono", weight: ["400", "500"] });
 
 export const metadata: Metadata = {
-  title: "Forward Deployed Engineer — embeds & ships AI into production",
-  description: "A portfolio of live, working AI tools. I embed with businesses and ship Claude-powered features into production.",
+  title: "Thomas Gates III's Portfolio",
+  description: "A portfolio of live, working AI tools built to maximize efficiency using AI.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -117,13 +117,13 @@ const PrismaHero = () => {
 
         {/* Navbar — real FDE links */}
         <nav className="absolute left-1/2 top-0 z-20 -translate-x-1/2">
-          <div className="flex items-center gap-4 rounded-b-2xl bg-black/90 px-5 py-2.5 backdrop-blur-sm sm:gap-7 md:gap-11 md:rounded-b-3xl md:px-9">
+          <div className="flex items-center gap-2.5 rounded-b-2xl bg-black/90 px-3 py-2.5 backdrop-blur-sm sm:gap-7 sm:px-5 md:gap-11 md:rounded-b-3xl md:px-9">
             {navItems.map((item) => (
               <a
                 key={item.label}
                 href={item.href}
                 {...(item.download ? { download: true } : {})}
-                className="font-mono text-[10px] uppercase tracking-wider text-cream/70 transition-colors hover:text-accent sm:text-xs"
+                className="whitespace-nowrap font-mono text-[9px] uppercase tracking-wider text-cream/70 transition-colors hover:text-accent sm:text-[10px] md:text-xs"
               >
                 {item.label}
               </a>
@@ -135,8 +135,8 @@ const PrismaHero = () => {
         <div className="absolute inset-x-0 bottom-0 px-5 pb-7 sm:px-8 md:px-12 md:pb-12">
           <div className="grid grid-cols-12 items-end gap-6">
             <div className="col-span-12 lg:col-span-8">
-              <h1 className="font-display font-medium leading-[0.85] tracking-[-0.05em] text-cream text-[13vw] sm:text-[11vw] md:text-[9.5vw] lg:text-[7.5vw]">
-                <WordsPullUp text="Thomas Gates III" />
+              <h1 className="font-display font-medium leading-[0.85] tracking-[-0.05em] text-cream text-[11vw] sm:text-[11vw] md:text-[9.5vw] lg:text-[7.5vw]">
+                <WordsPullUp text={"Thomas Gates III"} />
               </h1>
               <motion.p
                 initial={{ opacity: 0, y: 10 }}
@@ -148,34 +148,34 @@ const PrismaHero = () => {
               </motion.p>
             </div>
 
-            <div className="col-span-12 flex flex-col gap-5 pb-28 lg:col-span-4 lg:pb-40">
+            <div className="col-span-12 flex flex-col gap-5 sm:pb-28 lg:col-span-4 lg:pb-40">
               <motion.p
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                className="ml-auto max-w-xs text-right text-sm leading-snug text-cream/80 md:text-base"
+                className="max-w-xs text-sm leading-snug text-cream/80 sm:ml-auto sm:text-right md:text-base"
               >
                 I build AI systems that collapse hours of busywork into seconds. Not demos,
                 production. Everything below runs live.
               </motion.p>
+
+              {/* CTA — in normal flow on mobile so it never overlaps the copy above; anchored to the corner from sm: up */}
+              <motion.div
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                className="z-20 sm:absolute sm:bottom-28 sm:right-6"
+              >
+                <LiquidButton href="#gallery" size="xxl" className="group gap-3 pl-8 pr-2.5 text-base sm:gap-5 sm:pl-12 sm:text-2xl">
+                  View projects
+                  <span className="flex h-11 w-11 items-center justify-center rounded-full bg-accent transition-transform group-hover:scale-110 sm:h-[3.75rem] sm:w-[3.75rem]">
+                    <ArrowRight className="h-5 w-5 text-ink sm:h-7 sm:w-7" />
+                  </span>
+                </LiquidButton>
+              </motion.div>
             </div>
           </div>
         </div>
-
-        {/* CTA anchored to the bottom-right corner */}
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="absolute bottom-20 right-4 z-20 sm:bottom-28 sm:right-6"
-        >
-          <LiquidButton href="#gallery" size="xxl" className="group gap-5 pl-12 pr-2.5 sm:text-2xl">
-            View projects
-            <span className="flex h-[3.4rem] w-[3.4rem] items-center justify-center rounded-full bg-accent transition-transform group-hover:scale-110 sm:h-[3.75rem] sm:w-[3.75rem]">
-              <ArrowRight className="h-7 w-7 text-ink" />
-            </span>
-          </LiquidButton>
-        </motion.div>
       </div>
     </section>
   );

@@ -3,6 +3,7 @@ import { motion, useInView } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { useRef } from "react";
 import { LiquidButton } from "@/components/ui/liquid-glass-button";
+import { cn } from "@/lib/utils";
 
 /* ---------------- WordsPullUp ---------------- */
 interface WordsPullUpProps {
@@ -18,7 +19,7 @@ export const WordsPullUp = ({ text, className = "", showAsterisk = false, style 
   const words = text.split(" ");
 
   return (
-    <div ref={ref} className={`inline-flex flex-wrap ${className}`} style={style}>
+    <div ref={ref} className={cn("inline-flex flex-wrap", className)} style={style}>
       {words.map((word, i) => {
         const isLast = i === words.length - 1;
         return (
@@ -132,28 +133,28 @@ const PrismaHero = () => {
         </nav>
 
         {/* Hero content — bottom anchored */}
-        <div className="absolute inset-x-0 bottom-0 px-5 pb-7 sm:px-8 md:px-12 md:pb-12">
+        <div className="absolute inset-x-0 bottom-0 px-5 pb-10 sm:px-8 sm:pb-12 md:px-12 md:pb-12">
           <div className="grid grid-cols-12 items-end gap-6">
             <div className="col-span-12 lg:col-span-8">
-              <h1 className="font-display font-medium leading-[0.85] tracking-[-0.05em] text-cream text-[11vw] sm:text-[11vw] md:text-[9.5vw] lg:text-[7.5vw]">
-                <WordsPullUp text={"Thomas Gates III"} />
+              <h1 className="font-display font-medium leading-[0.85] tracking-[-0.05em] text-cream text-[9.5vw] sm:text-[11vw] md:text-[9.5vw] lg:text-[7.5vw]">
+                <WordsPullUp text={"Thomas Gates III"} className="flex-nowrap" />
               </h1>
               <motion.p
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.4 }}
-                className="mt-3 pl-1 font-display text-lg font-bold uppercase tracking-wide text-white sm:text-xl md:pl-2 md:text-2xl"
+                className="mt-1.5 pl-1 font-display text-lg font-bold uppercase tracking-wide text-white sm:mt-3 sm:text-xl md:pl-2 md:text-2xl"
               >
                 Forward Deployed Engineer
               </motion.p>
             </div>
 
-            <div className="col-span-12 flex flex-col gap-5 sm:pb-28 lg:col-span-4 lg:pb-40">
+            <div className="col-span-12 flex flex-col gap-4 sm:pb-28 lg:col-span-4 lg:pb-40">
               <motion.p
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                className="max-w-xs text-sm leading-snug text-cream/80 sm:ml-auto sm:text-right md:text-base"
+                className="max-w-xs text-xs leading-snug text-cream/80 sm:ml-auto sm:text-right sm:text-sm md:text-base"
               >
                 I build AI systems that collapse hours of busywork into seconds. Not demos,
                 production. Everything below runs live.

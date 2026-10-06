@@ -13,8 +13,16 @@ const ORDERS = [
   { order_id: "1002", customer_name: "Marcus Webb", status: "processing", items: ["HOME-2210 x2"], total: 54.5, eta: "2026-08-02" },
   { order_id: "1003", customer_name: "Lena Ortiz", status: "delayed", items: ["ELEC-4471 x1", "ACC-9981 x1"], total: 134.25, eta: "2026-08-06" },
   { order_id: "1004", customer_name: "Sam Okafor", status: "delivered", items: ["HOME-2210 x1"], total: 27.25, eta: "2026-07-22" },
+  { order_id: "1010", customer_name: "Grace Liu", status: "delivered", items: ["ELEC-3390 x1"], total: 39.0, eta: "2026-07-18" },
+  { order_id: "1017", customer_name: "Tomás Vega", status: "shipped", items: ["HOME-1187 x2", "ACC-5502 x1"], total: 61.5, eta: "2026-08-03" },
+  { order_id: "1023", customer_name: "Aisha Bello", status: "cancelled", items: ["ACC-9981 x2"], total: 19.98, eta: "—" },
+  { order_id: "1029", customer_name: "Noah Kessler", status: "processing", items: ["ELEC-4471 x2"], total: 179.98, eta: "2026-08-05" },
+  { order_id: "1035", customer_name: "Yuki Tanaka", status: "delivered", items: ["HOME-2210 x1", "HOME-1187 x1"], total: 41.5, eta: "2026-07-25" },
   { order_id: "1042", customer_name: "Dana Kim", status: "delivered", items: ["ELEC-4471 x1"], total: 89.99, eta: "2026-07-20" },
+  { order_id: "1046", customer_name: "Oliver Bennett", status: "delayed", items: ["ELEC-3390 x1", "ACC-5502 x2"], total: 71.5, eta: "2026-08-09" },
   { order_id: "1051", customer_name: "Rina Patel", status: "processing", items: ["ACC-9981 x3"], total: 44.97, eta: "2026-08-01" },
+  { order_id: "1058", customer_name: "Elena Marchetti", status: "shipped", items: ["ELEC-4471 x1", "HOME-2210 x1"], total: 111.99, eta: "2026-08-04" },
+  { order_id: "1063", customer_name: "Jamal Whitfield", status: "delivered", items: ["ACC-5502 x1"], total: 14.99, eta: "2026-07-28" },
 ];
 
 const SKUS = [
@@ -24,6 +32,12 @@ const SKUS = [
   { sku: "ELEC-3390", name: "Bluetooth Speaker Mini", stock: 62, status: "in-stock" },
   { sku: "HOME-1187", name: "Bamboo Cutting Board", stock: 15, status: "in-stock" },
   { sku: "ACC-5502", name: "Phone Grip Stand", stock: 3, status: "low-stock" },
+  { sku: "ELEC-2201", name: "USB-C Fast Charger 65W", stock: 47, status: "in-stock" },
+  { sku: "ELEC-5510", name: "Noise-Cancelling Headphones", stock: 9, status: "low-stock" },
+  { sku: "HOME-3305", name: "Stainless Steel Water Bottle", stock: 0, status: "out-of-stock" },
+  { sku: "HOME-4420", name: "Linen Throw Blanket", stock: 33, status: "in-stock" },
+  { sku: "ACC-6614", name: "Laptop Sleeve 14-inch", stock: 21, status: "in-stock" },
+  { sku: "ACC-7728", name: "Wireless Mouse", stock: 2, status: "low-stock" },
 ];
 
 const SYSTEM_PROMPT = `You are Ops Copilot, an internal support agent for a small e-commerce/logistics business.

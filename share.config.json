@@ -1,0 +1,30 @@
+{
+  "name": "Thomas Gates III",
+  "url": "https://portfolio.gatestech.solutions",
+  "outDir": "public",
+  "title": "Thomas Gates III | Forward Deployed Engineer",
+  "description": "A portfolio of live, working AI tools. I embed with businesses and ship Claude-powered features into production.",
+  "headline": "Forward Deployed Engineer shipping AI into production",
+  "chips": [
+    "Live AI tools",
+    "Built on Claude"
+  ],
+  "imageAlt": "Thomas Gates III, Forward Deployed Engineer: a portfolio of live AI tools",
+  "logo": "public/logo.svg",
+  "logoWidth": 120,
+  "photo": "public/hero-poster.jpg",
+  "photoPosition": "325px -60px / auto 120%",
+  "font": "public/fonts/space-grotesk.woff2",
+  "colors": {
+    "background": "#0B0C0E",
+    "accent": "#22D3EE",
+    "onAccent": "#0B0C0E",
+    "text": "#ECE7DF",
+    "muted": "#9A968E"
+  },
+  "tabIconCrop": {
+    "x": 75,
+    "y": 90,
+    "size": 250
+  }
+}

@@ -149,7 +149,7 @@ const PrismaHero = () => {
               </motion.p>
             </div>
 
-            <div className="col-span-12 flex flex-col gap-4 sm:pb-28 lg:col-span-4 lg:pb-40">
+            <div className="col-span-12 flex flex-col gap-4 sm:items-end sm:pb-16 lg:col-span-4 lg:pb-24">
               <motion.p
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
@@ -160,12 +160,12 @@ const PrismaHero = () => {
                 production. Everything below runs live.
               </motion.p>
 
-              {/* CTA — in normal flow on mobile so it never overlaps the copy above; anchored to the corner from sm: up */}
+              {/* CTA — always in normal flow below the copy so it can never overlap it */}
               <motion.div
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                className="z-20 sm:absolute sm:bottom-28 sm:right-6"
+                className="z-20"
               >
                 <LiquidButton href="#gallery" size="xxl" className="group gap-3 pl-8 pr-2.5 text-base sm:gap-5 sm:pl-12 sm:text-2xl">
                   View projects

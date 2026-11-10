@@ -37,7 +37,7 @@ export default function Page() {
         </div>
 
         <footer className="mt-14 border-t border-edge pt-6 font-mono text-[11px] uppercase tracking-widest text-muted">
-          Chunk → retrieve → answer with citations · demo runs on Claude Haiku
+          Chunk → retrieve → answer with citations · live demo
         </footer>
       </div>
     </main>

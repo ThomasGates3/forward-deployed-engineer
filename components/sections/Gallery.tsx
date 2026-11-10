@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { MotionConfig } from "framer-motion";
 import { ExternalLink } from "lucide-react";
-import { demos } from "@/content/gallery";
+import { cardImage, demos } from "@/content/gallery";
 import { lobby } from "@/content/city-scroll";
 import { Badge, SectionHeading } from "@/components/ui";
 import { Stagger, StaggerItem } from "@/components/motion";
@@ -102,15 +102,20 @@ export function Gallery() {
           <SectionHeading
             eyebrow="Projects"
             title="Working AI tools you can use right now."
-            sub="Live projects, not screenshots. Two are standalone Gemini apps. The four hosted here run on Claude Haiku, are free to try and rate-limited, and if you hit a limit you get a saved example instead of an error."
+            sub="Live projects, not screenshots. Two are standalone production apps. The four hosted here are free to try and rate-limited, and if you hit a limit you get a saved example instead of an error."
           />
           <MotionConfig reducedMotion="user">
             <Stagger className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
               {demos.map((d) => (
                 <StaggerItem key={d.id} id={d.id} className="h-full scroll-mt-6">
                   <article className="lobby-card group" data-testid={`card-${d.id}`}>
+                    <picture className="lobby-thumb">
+                      <source type="image/avif" srcSet={cardImage(d.id, "avif")} />
+                      <source type="image/webp" srcSet={cardImage(d.id, "webp")} />
+                      <img src={cardImage(d.id, "jpg")} alt="" width={800} height={450} loading="lazy" decoding="async" />
+                    </picture>
                     <div className="flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-wider">
-                      <Badge tone={d.model === "Gemini" ? "edge" : "accent"}>{d.model}</Badge>
+                      <Badge tone="accent">{d.tag}</Badge>
                       <span className="text-[color:var(--cs-steel)]">{d.external ? "External app ↗" : "Live"}</span>
                     </div>
                     <h3 className="font-display text-xl leading-tight text-[color:var(--cs-text)]">{d.name}</h3>

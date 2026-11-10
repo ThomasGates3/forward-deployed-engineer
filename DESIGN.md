@@ -153,8 +153,9 @@ LiquidButton and rail dots.
   identical lobby image and a scrim comes in, so there is no seam. Then a slow push-in (scale 1 to
   1.04, -2% Y) that is off under reduced motion.
 - **Project cards (glass):** `--cs-panel`, `blur(24px) saturate(1.5)`, hairline border, inset top
-  highlight, cyan to electric-blue top hairline. Row 1 model badge (accent = Claude Haiku, edge =
-  Gemini) plus "Live" / "External app". Title, silver value copy at 15px / 1.55, then a real
+  highlight, cyan to electric-blue top hairline. A 16:9 art still on top (generated in the film's
+  style, `public/projects/<id>`), then a category tag ("RAG search", "AI agent"...) plus "Live" /
+  "External app". Never name the model or vendor on the public site. Title, silver value copy at 15px / 1.55, then a real
   "Try it" link in its own row (full width under 640px); the link's `::after` makes the whole card
   clickable. Hover/focus: cyan/40 border, cyan + electric glow, 2px lift, cyan focus ring. `id` equals
   the demo id so film links (`#doc-qa`, `#ops-copilot`, `#evals`) land on the card.
@@ -177,6 +178,7 @@ clients, testimonials, logos or prices. Banned: em dashes in visible copy, "elev
 - Don't use three equal icon-in-circle feature columns or stock headshots.
 - Don't put em dashes in visible copy.
 - Don't label the film stops with numbers or names (`[02 SIGNAL]` style). The headline carries the stop.
+- Don't leave a visitor parked between stops: the film glides to the nearest card when scrolling stops, and a paused frame is a single sharp frame.
 
 ## Responsive Behavior
 

@@ -82,7 +82,7 @@ body {
 .cs-link:focus-visible, .cs-dot:focus-visible { outline: 2px solid var(--cs-cyan); outline-offset: 3px; border-radius: 4px; }
 
 /* Static view */
-.cs-rail, .cs-cue { display: none; }
+.cs-rail, .cs-cue, .cs-scroll-cue { display: none; }
 .cs-cards { position: relative; z-index: 5; max-width: 72rem; margin: 0 auto; padding: 3rem 1.5rem 1rem; display: grid; gap: 1.5rem; }
 .cs-card, .cs-group { display: grid; gap: 1.25rem; align-items: start; }
 @media (min-width: 768px) { .cs-card, .cs-group { grid-template-columns: 280px 1fr; } .cs-group > .cs-item { grid-column: 2; } .cs-group > .cs-still { grid-row: 1 / span 2; } }
@@ -114,7 +114,7 @@ body {
 .cs[data-mode="film"] .cs-slot > .cs-card { padding: 1.5rem; }
 /* Mobile: the two agent tags stack bottom-center inside the group */
 .cs[data-mode="film"] .cs-item { position: relative; left: auto; right: auto; bottom: auto; padding: 1rem 1.25rem; }
-.cs[data-mode="film"] .cs-rail, .cs-cue { display: none; }
+.cs[data-mode="film"] .cs-rail, .cs-cue, .cs-scroll-cue { display: none; }
 
 @media (min-width: 768px) {
   .cs[data-mode="film"] .cs-slot { left: 48px; right: auto; bottom: 64px; width: min(440px, 40vw); }
@@ -205,4 +205,32 @@ body {
   .lobby-card { transition: transform 180ms var(--ease-out), box-shadow 180ms var(--ease-out), border-color 180ms var(--ease-out); }
   .lobby-try { transition: color 160ms var(--ease-out), border-color 160ms var(--ease-out); }
   .lobby-card:hover, .lobby-card:has(a:focus-visible) { transform: translateY(-2px); }
+}
+
+/* Card art: generated stills in the film's style, cropped 16:9 at the top of each glass card */
+.lobby-thumb { display: block; margin: -0.5rem -0.5rem 0.25rem; border-radius: 0.75rem; overflow: hidden; aspect-ratio: 16 / 9; border: 1px solid var(--cs-hairline); background: var(--cs-bg); }
+.lobby-thumb img { width: 100%; height: 100%; object-fit: cover; }
+@media (prefers-reduced-motion: no-preference) {
+  .lobby-thumb img { transition: transform 260ms var(--ease-out); }
+  .lobby-card:hover .lobby-thumb img, .lobby-card:has(a:focus-visible) .lobby-thumb img { transform: scale(1.03); }
+}
+
+/* "Scroll" cue on the opening frame: label + arrow that nudges down. Film mode only. */
+.cs[data-mode="film"] .cs-scroll-cue {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  position: absolute; left: 50%; bottom: 28px; z-index: 12; transform: translateX(-50%);
+  min-width: 44px; min-height: 44px; padding: 4px 8px;
+  font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--cs-text);
+}
+.cs-scroll-cue svg { color: var(--cs-cyan); filter: drop-shadow(0 0 6px rgba(34, 211, 238, 0.6)); }
+.cs-scroll-cue:focus-visible { outline: 2px solid var(--cs-cyan); outline-offset: 3px; border-radius: 6px; }
+/* Phones: the hero copy and CTA fill the bottom, so the cue sits at the right edge beside the CTA. */
+@media (max-width: 767px) {
+  .cs[data-mode="film"] .cs-scroll-cue { left: auto; right: 12px; bottom: 44px; transform: none; }
+}
+@media (min-width: 1024px) { .cs[data-mode="film"] .cs-scroll-cue { bottom: 36px; } }
+@media (prefers-reduced-motion: no-preference) {
+  .cs-scroll-cue svg { animation: cs-nudge 1.6s var(--ease-spring) infinite; }
+  @keyframes cs-nudge { 0%, 100% { transform: translateY(0); opacity: 1; } 50% { transform: translateY(7px); opacity: 0.6; } }
 }

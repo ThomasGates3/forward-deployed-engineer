@@ -122,7 +122,7 @@ body {
   .cs[data-mode="film"] .cs-slot { left: 48px; right: auto; bottom: 64px; width: min(440px, 40vw); }
   /* Agent tags pinned beside the tower floors (top floor, middle floor) */
   .cs[data-mode="film"] .cs-group { inset: 0; display: block; }
-  .cs[data-mode="film"] .cs-item { position: absolute; left: auto; right: calc(50% + 18vw); width: 320px; padding: 1.5rem; }
+  .cs[data-mode="film"] .cs-item { position: absolute; left: max(24px, calc(32vw - 320px)); right: auto; width: 320px; padding: 1.5rem; }
   .cs[data-mode="film"] .cs-item-0 { top: 17%; }
   .cs[data-mode="film"] .cs-item-1 { top: 45%; }
   .cs[data-mode="film"] .cs-item::after {

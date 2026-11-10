@@ -7,10 +7,9 @@ export default function Home() {
   return (
     <main>
       {/* Poster is the LCP image; the film frames and mp4s load later from JS. */}
-      <link rel="preload" as="image" href="/hero/poster.jpg" media="(min-width: 768px)" fetchPriority="high" />
-      <link rel="preload" as="image" href="/hero/poster-mobile.jpg" media="(max-width: 767px)" fetchPriority="high" />
+      <link rel="preload" as="image" type="image/avif" href="/hero/poster.avif" media="(min-width: 768px)" fetchPriority="high" />
+      <link rel="preload" as="image" type="image/avif" href="/hero/poster-mobile.avif" media="(max-width: 767px)" fetchPriority="high" />
       <Hero />
-      <div className="rule" />
       <Gallery />
       <div className="rule" />
       <HowIWork />

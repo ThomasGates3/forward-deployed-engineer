@@ -9,7 +9,7 @@ const config: Config = {
         surface: "#131417",
         edge: "#26282E",
         cream: "#ECE7DF",
-        muted: "#9A968E",
+        muted: "#B5B1A9",
         accent: { DEFAULT: "#22D3EE", soft: "#67E8F9", dim: "#0E7490" },
       },
       fontFamily: {

@@ -21,8 +21,14 @@ type Opts = {
 
 export type ScrubPath = "canvas" | "video";
 
-const FADE = 0.06;
-const LERP = 0.2;
+// Overlays sit fully opaque for most of their range: a short fade at each edge, inset by a small
+// gap so the outgoing card is gone before the incoming one starts (no half-faded pair mid-screen).
+const FADE = 0.03;
+const GAP = 0.006;
+// After the last frame the stage stays pinned for HOLD x its height while the Projects lobby
+// cross-fades in underneath (see Gallery.tsx and .cs + .lobby in globals.css).
+export const HOLD = 0.6;
+const SMOOTH_MS = 110; // time constant for easing toward the scroll target (frame-rate independent)
 const CONCURRENCY = 6;
 const clamp = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
 
@@ -49,20 +55,25 @@ export function startCityScroll(els: Els, o: Opts) {
   let activeDot = -1;
 
   // ---------- progress + overlays ----------
+  // Scroll distance over which p runs 0..1: section height minus the pinned stage and the hold.
+  const filmSpan = () => {
+    const stageH = (section.querySelector(".cs-stage") as HTMLElement | null)?.clientHeight || innerHeight;
+    return section.offsetHeight - stageH * (1 + HOLD);
+  };
   const measure = () => {
     const r = section.getBoundingClientRect();
-    const span = r.height - innerHeight;
+    const span = filmSpan();
     target = span > 0 ? clamp(-r.top / span) : 0;
   };
 
   const applyOverlays = (p: number) => {
     fades.forEach((el, i) => {
       const [a, b] = ranges[i];
-      const vin = a <= 0 ? 1 : clamp((p - a) / FADE);
-      const vout = b >= 1 ? 1 : clamp((b - p) / FADE);
+      const vin = a <= 0 ? 1 : clamp((p - a - GAP) / FADE);
+      const vout = b >= 1 ? 1 : clamp((b - GAP - p) / FADE);
       const v = Math.min(vin, vout);
       el.style.opacity = String(v);
-      el.style.transform = `translate3d(0, ${(1 - v) * 12}px, 0)`;
+      if (!("fadeOnly" in el.dataset)) el.style.transform = `translate3d(0, ${(1 - v) * 12}px, 0)`;
       el.style.visibility = v < 0.01 ? "hidden" : "visible";
     });
     let active = 0;
@@ -94,29 +105,43 @@ export function startCityScroll(els: Els, o: Opts) {
     const dpr = Math.min(devicePixelRatio || 1, 2);
     canvas.width = Math.round(canvas.clientWidth * dpr);
     canvas.height = Math.round(canvas.clientHeight * dpr);
+    if (ctx) ctx.imageSmoothingQuality = "high";
     drawn = -1;
+    drawnKey = "";
   };
 
-  const nearestLoaded = (i: number) => {
-    for (let d = 0; d < o.frameCount; d++) {
-      if (imgs[i - d]) return i - d;
-      if (imgs[i + d]) return i + d;
-    }
-    return -1;
-  };
+  const loadedBelow = (i: number) => { for (let j = Math.floor(i); j >= 0; j--) if (imgs[j]) return j; return -1; };
+  const loadedAbove = (i: number) => { for (let j = Math.ceil(i); j < o.frameCount; j++) if (imgs[j]) return j; return -1; };
 
-  const drawFrame = (p: number) => {
-    if (!ctx) return;
-    const i = nearestLoaded(Math.round(p * (o.frameCount - 1)));
-    if (i < 0 || i === drawn) return; // never clear to a blank frame
-    const img = imgs[i]!;
+  const cover = (img: HTMLImageElement, alpha: number) => {
     const { width: cw, height: ch } = canvas;
     const s = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
     const dw = img.naturalWidth * s;
     const dh = img.naturalHeight * s;
-    ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+    ctx!.globalAlpha = alpha;
+    ctx!.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+  };
+
+  // Draws the exact sub-frame position by cross-fading the two nearest loaded frames,
+  // so motion stays continuous between frames (and across gaps while frames are still loading).
+  let drawnKey = "";
+  const drawFrame = (p: number) => {
+    if (!ctx) return;
+    const x = p * (o.frameCount - 1);
+    let a = loadedBelow(x);
+    let b = loadedAbove(x);
+    if (a < 0) a = b;
+    if (b < 0) b = a;
+    if (a < 0) return; // nothing loaded yet: the poster stays up, never a blank frame
+    const t = a === b ? 0 : Math.round(((x - a) / (b - a)) * 24) / 24;
+    const key = `${a}|${b}|${t}`;
+    if (key === drawnKey) return;
+    cover(imgs[a]!, 1);
+    if (t > 0) cover(imgs[b]!, t);
+    ctx.globalAlpha = 1;
     if (drawn < 0 && canvas.style.opacity !== "1") revealMedia(canvas);
-    drawn = i;
+    drawn = a;
+    drawnKey = key;
   };
 
   const pump = () => {
@@ -188,14 +213,18 @@ export function startCityScroll(els: Els, o: Opts) {
   }
 
   // ---------- loop ----------
-  function tick() {
+  let last = 0;
+  function tick(now: number) {
     raf = 0;
+    const dt = last ? Math.min(now - last, 64) : 16;
+    last = now;
     const settled = Math.abs(target - cur) < 1e-4;
-    cur = cur < 0 || settled ? target : cur + (target - cur) * LERP;
+    cur = cur < 0 || settled ? target : cur + (target - cur) * (1 - Math.exp(-dt / SMOOTH_MS));
     applyOverlays(cur);
     if (path === "canvas") drawFrame(cur);
     else seekVideo(cur);
     if (cur !== target) kick();
+    else last = 0;
   }
 
   const onScroll = () => { measure(); kick(); };
@@ -219,9 +248,9 @@ export function startCityScroll(els: Els, o: Opts) {
 
   const scrollToStage = (i: number) => {
     const s = o.stageStarts[i];
-    const p = i === 0 ? 0 : i === o.stageStarts.length - 1 ? 1 : s + FADE;
+    const p = i === 0 ? 0 : s + GAP + FADE + 0.01; // lands inside the fully opaque hold
     const top = section.getBoundingClientRect().top + scrollY;
-    scrollTo({ top: top + p * (section.offsetHeight - innerHeight), behavior: "smooth" });
+    scrollTo({ top: top + p * filmSpan(), behavior: "smooth" });
   };
 
   return {

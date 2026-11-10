@@ -13,7 +13,7 @@ colors:
   cream: "#ECE7DF"
   silver: "#C9D1DC"
   steel: "#8A94A6"
-  muted: "#9A968E"
+  muted: "#B5B1A9"
   primary: "#22D3EE"
   primary-soft: "#67E8F9"
   primary-dim: "#0E7490"
@@ -96,12 +96,13 @@ night-city engineering console: a cinematic city at the top, then working tools 
 is low in the hero and medium in the project grid.
 
 The hero is the City Scroll: a pinned, full-bleed film that scrubs with scroll as Thomas's cyan
-data signal leaves his rooftop and drops through the city in five stops. It is the one signature
+data signal leaves his rooftop, drops through the city in five stops, then flies through the orb and
+the tower entrance into the lobby where the Projects section lives. It is the one signature
 interaction on the site.
 
 ## Colors
 
-- `primary` cyan `#22D3EE` is the signal: active rail dot, stage tags, primary buttons, hover
+- `primary` cyan `#22D3EE` is the signal: active rail dot, "See it live" links, primary buttons, hover
   states. Use it sparingly so it keeps meaning "live".
 - `electric` `#2F6BFF` is the only partner color, for rare secondary emphasis. Never gradient it
   into anything outside the blue family.
@@ -117,7 +118,7 @@ interaction on the site.
 | Stage line (h2) | Space Grotesk 500 | display-md | -0.03em |
 | Section heading | Space Grotesk 500 | heading | -0.02em |
 | Body | Inter 400 | 1rem / 1.6, max 62ch | 0 |
-| Stage tag, nav, buttons | JetBrains Mono 500, uppercase | 0.75rem | +0.08em |
+| Nav (min 14px, 44px tap), buttons, links | JetBrains Mono 500, uppercase | 0.875rem | +0.08em (tighter on phones) |
 
 One `<h1>` per page: the name. Stage lines are `<h2>`.
 
@@ -140,13 +141,23 @@ LiquidButton and rail dots.
 
 ## Components
 
-- **HUD card:** panel background, hairline border, 16px radius, 24px padding. Mono stage tag
-  `[02 SIGNAL]` in cyan above an h2 and a silver body line. Fades and lifts in (opacity 0 to 1,
-  translateY 12px to 0) over 6% of scroll.
-- **Progress rail:** 1px vertical line on the right with five dots as buttons. Active dot is cyan
+- **HUD card:** panel background, hairline border, 16px radius, 24px padding. An h2 and a silver
+  body line, no stage number or label above it. Fades and lifts in (opacity 0 to 1, translateY
+  12px to 0) over 6% of scroll.
+- **Progress rail:** 1px vertical line on the right with six dots as buttons (the sixth jumps to
+  `#gallery`). Active dot is cyan
   with a soft glow. Hidden under 768px.
 - **Buttons:** solid cyan with dark text, or outline with hairline/edge border; 44px min height.
-- **Cards:** existing project cards, `id` equal to the demo id so stage tags can link to them.
+- **Lobby (Projects):** full-bleed lobby still (`/public/lobby`, AVIF/WebP/JPG), sticky behind the
+  section. The hero holds its last frame for 0.6 of a screen (`HOLD`) while it cross-fades into the
+  identical lobby image and a scrim comes in, so there is no seam. Then a slow push-in (scale 1 to
+  1.04, -2% Y) that is off under reduced motion.
+- **Project cards (glass):** `--cs-panel`, `blur(24px) saturate(1.5)`, hairline border, inset top
+  highlight, cyan to electric-blue top hairline. Row 1 model badge (accent = Claude Haiku, edge =
+  Gemini) plus "Live" / "External app". Title, silver value copy at 15px / 1.55, then a real
+  "Try it" link in its own row (full width under 640px); the link's `::after` makes the whole card
+  clickable. Hover/focus: cyan/40 border, cyan + electric glow, 2px lift, cyan focus ring. `id` equals
+  the demo id so film links (`#doc-qa`, `#ops-copilot`, `#evals`) land on the card.
 
 ## Voice
 
@@ -165,11 +176,12 @@ clients, testimonials, logos or prices. Banned: em dashes in visible copy, "elev
 - Don't build fake product UI out of divs; use the real film frames and stills.
 - Don't use three equal icon-in-circle feature columns or stock headshots.
 - Don't put em dashes in visible copy.
+- Don't label the film stops with numbers or names (`[02 SIGNAL]` style). The headline carries the stop.
 
 ## Responsive Behavior
 
-- ≥768px: canvas frame scrub, 520vh pinned section, HUD bottom-left, rail visible.
-- <768px: video scrub of the 720x1280 crop, 420vh section, HUD bottom-center, no rail.
+- ≥768px: canvas scrub of 606 1920x1080 frames (adjacent frames cross-faded), 710vh section (650vh of film + 60vh hold), HUD bottom-left, rail visible.
+- <768px: video scrub of the 1080x1920 crop, 585vh section (525vh + hold), HUD bottom-center, no rail.
 - Save-Data or 2g/3g: video scrub at any width. Reduced motion: no pinning, poster + list.
 - Touch targets 44px minimum.
 
@@ -183,4 +195,4 @@ ranges from `data-range` attributes, so no engine change is needed.
 
 - Rest of the site still uses `cream` and `ink` (`#0B0C0E`). The hero uses `canvas`/`text`.
   Unifying them is a separate pass.
-- The structured-extraction line in stage 04 has no dedicated live demo yet; Thomas to confirm or cut.
+- `BOOK_INTRO_HREF` in `components/sections/Contact.tsx` is empty until Thomas adds a booking link.

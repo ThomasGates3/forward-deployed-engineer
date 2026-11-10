@@ -27,6 +27,11 @@ test("no em dashes in visible copy", async ({ page }) => {
   expect(await page.locator("body").innerText()).not.toContain("—");
 });
 
+test("film stops carry no number/name labels", async ({ page }) => {
+  await page.goto("/");
+  expect(await page.locator("#city-scroll").innerText()).not.toMatch(/\[0\d\s+[A-Z]+\]/);
+});
+
 test("stage links point at real project cards", async ({ page }) => {
   await page.goto("/");
   const hrefs = await page.locator("#city-scroll a[href^='#']").evaluateAll((as) => as.map((a) => a.getAttribute("href")!));

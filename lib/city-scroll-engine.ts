@@ -22,7 +22,7 @@ type Opts = {
 export type ScrubPath = "canvas" | "video";
 
 const FADE = 0.06;
-const LERP = 0.2;
+const SMOOTH_MS = 110; // time constant for easing toward the scroll target (frame-rate independent)
 const CONCURRENCY = 6;
 const clamp = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
 
@@ -94,29 +94,43 @@ export function startCityScroll(els: Els, o: Opts) {
     const dpr = Math.min(devicePixelRatio || 1, 2);
     canvas.width = Math.round(canvas.clientWidth * dpr);
     canvas.height = Math.round(canvas.clientHeight * dpr);
+    if (ctx) ctx.imageSmoothingQuality = "high";
     drawn = -1;
+    drawnKey = "";
   };
 
-  const nearestLoaded = (i: number) => {
-    for (let d = 0; d < o.frameCount; d++) {
-      if (imgs[i - d]) return i - d;
-      if (imgs[i + d]) return i + d;
-    }
-    return -1;
-  };
+  const loadedBelow = (i: number) => { for (let j = Math.floor(i); j >= 0; j--) if (imgs[j]) return j; return -1; };
+  const loadedAbove = (i: number) => { for (let j = Math.ceil(i); j < o.frameCount; j++) if (imgs[j]) return j; return -1; };
 
-  const drawFrame = (p: number) => {
-    if (!ctx) return;
-    const i = nearestLoaded(Math.round(p * (o.frameCount - 1)));
-    if (i < 0 || i === drawn) return; // never clear to a blank frame
-    const img = imgs[i]!;
+  const cover = (img: HTMLImageElement, alpha: number) => {
     const { width: cw, height: ch } = canvas;
     const s = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
     const dw = img.naturalWidth * s;
     const dh = img.naturalHeight * s;
-    ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+    ctx!.globalAlpha = alpha;
+    ctx!.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+  };
+
+  // Draws the exact sub-frame position by cross-fading the two nearest loaded frames,
+  // so motion stays continuous between frames (and across gaps while frames are still loading).
+  let drawnKey = "";
+  const drawFrame = (p: number) => {
+    if (!ctx) return;
+    const x = p * (o.frameCount - 1);
+    let a = loadedBelow(x);
+    let b = loadedAbove(x);
+    if (a < 0) a = b;
+    if (b < 0) b = a;
+    if (a < 0) return; // nothing loaded yet: the poster stays up, never a blank frame
+    const t = a === b ? 0 : Math.round(((x - a) / (b - a)) * 24) / 24;
+    const key = `${a}|${b}|${t}`;
+    if (key === drawnKey) return;
+    cover(imgs[a]!, 1);
+    if (t > 0) cover(imgs[b]!, t);
+    ctx.globalAlpha = 1;
     if (drawn < 0 && canvas.style.opacity !== "1") revealMedia(canvas);
-    drawn = i;
+    drawn = a;
+    drawnKey = key;
   };
 
   const pump = () => {
@@ -188,14 +202,18 @@ export function startCityScroll(els: Els, o: Opts) {
   }
 
   // ---------- loop ----------
-  function tick() {
+  let last = 0;
+  function tick(now: number) {
     raf = 0;
+    const dt = last ? Math.min(now - last, 64) : 16;
+    last = now;
     const settled = Math.abs(target - cur) < 1e-4;
-    cur = cur < 0 || settled ? target : cur + (target - cur) * LERP;
+    cur = cur < 0 || settled ? target : cur + (target - cur) * (1 - Math.exp(-dt / SMOOTH_MS));
     applyOverlays(cur);
     if (path === "canvas") drawFrame(cur);
     else seekVideo(cur);
     if (cur !== target) kick();
+    else last = 0;
   }
 
   const onScroll = () => { measure(); kick(); };

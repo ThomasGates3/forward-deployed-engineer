@@ -4,7 +4,7 @@
 set -euo pipefail
 
 DEST="public/hero"
-mkdir -p "$DEST/keyframes" "$DEST/frames"
+mkdir -p "$DEST/keyframes" "$DEST/frames" public/lobby
 COOKIES="$(mktemp)"
 trap 'rm -f "$COOKIES"' EXIT
 
@@ -41,26 +41,32 @@ download() {
   fi
 }
 
-download 1Q2BxeZhUK_bDlk33kn5WFPBvGxXXgqGB "$DEST/scroll-city.mp4"
-download 1ejRIFnppVMXEGjURy8QNuZ9qChjoD4Zg "$DEST/scroll-city-mobile.mp4"
-download 1IOzc39EL5uo0ARjtwWhuC5xfXcKiRmuX "$DEST/poster.jpg"
-download 1XXrMOPLA8RW5NpxSyaKG-alzwJqGIRTH "$DEST/poster-mobile.jpg"
-download 1vuG9JuJVcMcp3lYuyiSmqbo2QBA28U7S "$DEST/keyframes/stage1-rooftop.jpg"
-download 1gaCJUuN6ILQKtgYafkb24qkBPDQ7tmBk "$DEST/keyframes/stage2-drones.jpg"
-download 1pED45QoRFz3fxPeITSV3nFxdnblie4g- "$DEST/keyframes/stage3-tower.jpg"
-download 1mkUUpinc7kHrM0MBeEJnzdHow7Yy4lbl "$DEST/keyframes/stage4-billboard.jpg"
-download 1y34_7HcHQMB4uJEI_FkvRPlH1sDpuNkn "$DEST/keyframes/stage5-terminal.jpg"
-download 1W_5j8aevg-VupQ5IA3HJQoXEUaXHFkTW "$DEST/frames.zip"
+# Upscaled 1080p city film (2026-11-10) + door/lobby extension (frames 486-606).
+download 16Kg9olsffkpAtR1KoTJsV0lrPjX-BPgx "$DEST/scroll-city.mp4"
+download 1WioAZVbOxxNBLvRmJH4uJ1H36d-vWba1 "$DEST/scroll-city-mobile.mp4"
+download 1OHM3SNDaHDDMrRHykBLM9WOmoyJnSTI5 "$DEST/poster.jpg"
+download 1yDc8sscwiARB31BE3St42Mi2PA6FNP6_ "$DEST/poster-mobile.jpg"
+download 1pg13NGNUv5z5B85B-o98OTJaCX0pOrt- "$DEST/keyframes/stage1-rooftop.jpg"
+download 14nqsidKm8YqOZ3wis4RPR233l1qMsLde "$DEST/keyframes/stage2-drones.jpg"
+download 19rxbgBDmV9bZl5qqS_6LhYiapWuiwuP6 "$DEST/keyframes/stage3-tower.jpg"
+download 1f9pSjALzvupiKNNLLI6265shx33-wXE9 "$DEST/keyframes/stage4-billboard.jpg"
+download 10nxQ-tgojXYyuxnbFYpnxQ4fhntVmt52 "$DEST/keyframes/stage5-terminal.jpg"
+download 1jH4eUsDuK6rLdGpIUIIkA-eZ4Cns_Fth "public/lobby/lobby.jpg"
+download 1oOAINbpDCkhUL0tMZzr1lOzGBdVu6Js4 "public/lobby/lobby-mobile.jpg"
+download 1VDt0gTmaEBO4PrsZZOOlXsmpHJkO4a9D "$DEST/frames.zip"
+download 13DSFEtoaX6WLNq1VL4wQv-ddvjFmpX-e "$DEST/door-frames.zip"
 
-# frames.zip contains frames/f0001.jpg ... frames/f0485.jpg -> public/hero/frames/
-if command -v unzip >/dev/null 2>&1; then
-  unzip -oq "$DEST/frames.zip" -d "$DEST"
-else
-  python3 -c "import zipfile,sys; zipfile.ZipFile(sys.argv[1]).extractall(sys.argv[2])" "$DEST/frames.zip" "$DEST"
-fi
-rm -f "$DEST/frames.zip"
+# frames.zip -> frames/f0001..f0485.jpg, door-frames.zip -> frames/f0486..f0606.jpg (both into public/hero/frames/)
+for z in frames.zip door-frames.zip; do
+  if command -v unzip >/dev/null 2>&1; then
+    unzip -oq "$DEST/$z" -d "$DEST"
+  else
+    python3 -c "import zipfile,sys; zipfile.ZipFile(sys.argv[1]).extractall(sys.argv[2])" "$DEST/$z" "$DEST"
+  fi
+  rm -f "$DEST/$z"
+done
 
 count="$(ls "$DEST/frames" | grep -c '\.jpg$' || true)"
-echo "frames: $count (expected 485)"
-[ "$count" -eq 485 ] || { echo "ERROR: expected 485 frames" >&2; exit 1; }
+echo "frames: $count (expected 606)"
+[ "$count" -eq 606 ] || { echo "ERROR: expected 606 frames" >&2; exit 1; }
 echo "Done. Assets in $DEST/"

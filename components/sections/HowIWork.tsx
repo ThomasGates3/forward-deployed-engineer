@@ -4,7 +4,7 @@ import { Stagger, StaggerItem } from "@/components/motion";
 
 const steps = [
   { n: "01", t: "Discover", d: "Sit with the team, find where the hours actually go and where AI earns its keep." },
-  { n: "02", t: "Build", d: "Ship a working slice fast — real data, real integration, in production quickly." },
+  { n: "02", t: "Build", d: "Ship a working slice fast: real data, real integration, in production quickly." },
   { n: "03", t: "Deploy", d: "Wire it into the stack safely: keys server-side, rate limits, graceful fallbacks." },
   { n: "04", t: "Measure", d: "Instrument it, watch the outcome, iterate on what the numbers say." },
 ];

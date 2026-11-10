@@ -31,9 +31,10 @@ export function Stagger({ children, className = "" }: { children: React.ReactNod
   );
 }
 
-export function StaggerItem({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+export function StaggerItem({ children, className = "", id }: { children: React.ReactNode; className?: string; id?: string }) {
   return (
     <motion.div
+      id={id}
       className={className}
       variants={{ hidden: { opacity: 0, y: 18 }, show: { opacity: 1, y: 0, transition: { duration: 0.55, ease } } }}
     >

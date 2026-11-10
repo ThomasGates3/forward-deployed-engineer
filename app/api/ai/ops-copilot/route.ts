@@ -15,7 +15,7 @@ const ORDERS = [
   { order_id: "1004", customer_name: "Sam Okafor", status: "delivered", items: ["HOME-2210 x1"], total: 27.25, eta: "2026-07-22" },
   { order_id: "1010", customer_name: "Grace Liu", status: "delivered", items: ["ELEC-3390 x1"], total: 39.0, eta: "2026-07-18" },
   { order_id: "1017", customer_name: "Tomás Vega", status: "shipped", items: ["HOME-1187 x2", "ACC-5502 x1"], total: 61.5, eta: "2026-08-03" },
-  { order_id: "1023", customer_name: "Aisha Bello", status: "cancelled", items: ["ACC-9981 x2"], total: 19.98, eta: "—" },
+  { order_id: "1023", customer_name: "Aisha Bello", status: "cancelled", items: ["ACC-9981 x2"], total: 19.98, eta: "n/a" },
   { order_id: "1029", customer_name: "Noah Kessler", status: "processing", items: ["ELEC-4471 x2"], total: 179.98, eta: "2026-08-05" },
   { order_id: "1035", customer_name: "Yuki Tanaka", status: "delivered", items: ["HOME-2210 x1", "HOME-1187 x1"], total: 41.5, eta: "2026-07-25" },
   { order_id: "1042", customer_name: "Dana Kim", status: "delivered", items: ["ELEC-4471 x1"], total: 89.99, eta: "2026-07-20" },
@@ -189,7 +189,7 @@ export async function POST(req: Request) {
     if (!client) {
       return Response.json({
         source: "fallback",
-        reply: `Done — ${result.message} Refund ID ${result.refund_id} for $${input.amount} on order ${input.order_id}.`,
+        reply: `Done. ${result.message} Refund ID ${result.refund_id} for $${input.amount} on order ${input.order_id}.`,
         toolCalls,
         awaitingConfirmation: false,
       });
@@ -228,7 +228,7 @@ export async function POST(req: Request) {
     } catch {
       return Response.json({
         source: "fallback",
-        reply: `Done — ${result.message} Refund ID ${result.refund_id} for $${input.amount} on order ${input.order_id}.`,
+        reply: `Done. ${result.message} Refund ID ${result.refund_id} for $${input.amount} on order ${input.order_id}.`,
         toolCalls,
         awaitingConfirmation: false,
       });
@@ -238,7 +238,7 @@ export async function POST(req: Request) {
   if (body.pendingConfirmation && body.confirmed === false) {
     return Response.json({
       source: "live",
-      reply: "Refund cancelled — no action taken.",
+      reply: "Refund cancelled. No action taken.",
       toolCalls: [],
       awaitingConfirmation: false,
     });

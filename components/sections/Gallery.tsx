@@ -11,11 +11,11 @@ export function Gallery() {
       <SectionHeading
         eyebrow="Projects"
         title="Working AI tools you can use right now."
-        sub="Not screenshots — real, live projects. Each is a server-side Claude call, rate-limited and free to try, and opens as its own fully-themed experience. Hit a limit and it gracefully shows a saved example, never a broken state."
+        sub="Not screenshots. Real, live projects. Each is a server-side Claude call, rate-limited and free to try, and opens as its own fully-themed experience. Hit a limit and it gracefully shows a saved example, never a broken state."
       />
       <Stagger className="grid gap-5 md:grid-cols-2">
         {demos.map((d) => (
-          <StaggerItem key={d.id}>
+          <StaggerItem key={d.id} id={d.id} className="scroll-mt-6">
             <Link
               href={d.href ?? `/tools/${d.id}`}
               className="block h-full"

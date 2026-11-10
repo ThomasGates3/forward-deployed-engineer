@@ -111,7 +111,7 @@ function gradePolicy(tc: TestCase, policyJson: string): { rules: EvalRule[]; sco
     passed: passWildcardResource,
     detail: passWildcardResource
       ? "Resource scoping avoids a bare '*' wildcard."
-      : "Policy grants access to Resource: '*' — not least-privilege for this request.",
+      : "Policy grants access to Resource: '*', which is not least-privilege for this request.",
   });
 
   const hasWildcardAction = /"action"\s*:\s*"\*"|"action"\s*:\s*\[\s*"\*"\s*\]/i.test(policyJson);
@@ -121,7 +121,7 @@ function gradePolicy(tc: TestCase, policyJson: string): { rules: EvalRule[]; sco
     passed: passWildcardAction,
     detail: passWildcardAction
       ? "Actions are scoped rather than using '*'."
-      : "Policy grants Action: '*' — overly broad for this request.",
+      : "Policy grants Action: '*', which is overly broad for this request.",
   });
 
   const scopedToService = tc.expectServiceKeywords.some((kw) => lower.includes(kw.toLowerCase()));

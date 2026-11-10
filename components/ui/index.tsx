@@ -69,9 +69,9 @@ export function CopyButton({ text, label = "Copy" }: { text: string; label?: str
 export function FallbackNote({ reason }: { reason: string }) {
   const msg =
     reason === "per-visitor-cap"
-      ? "You've hit today's free tries for this tool — here's a saved example so you can still see it work."
+      ? "You've hit today's free tries for this tool, so here's a saved example so you can still see it work."
       : reason === "global-cap"
-      ? "The site hit its daily demo budget — here's a saved example response."
+      ? "The site hit its daily demo budget, so here's a saved example response."
       : "Showing a saved example response.";
   return (
     <div className="mb-4 flex items-center gap-2">

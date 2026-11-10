@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { Inter, Sora } from "next/font/google";
+import localFont from "next/font/local";
 import SpeedToLeadTool from "./SpeedToLeadTool";
 
-const sora = Sora({ subsets: ["latin"], weight: ["600", "700", "800"], variable: "--font-sora" });
-const inter = Inter({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-inter" });
+// Self-hosted so the build never depends on Google Fonts.
+const sora = localFont({ src: "../../fonts/sora-latin.woff2", weight: "100 800", variable: "--font-sora", display: "swap" });
+const inter = localFont({ src: "../../fonts/inter-latin.woff2", weight: "100 900", variable: "--font-inter", display: "swap" });
 
 export const metadata = {
   title: "Speed to Lead: AI Lead Qualification",

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { PrintButton } from "./PrintButton";
 
 export const metadata: Metadata = {
-  title: "Thomas Gates III — Forward Deployed Engineer · Résumé",
+  title: "Thomas Gates III | Forward Deployed Engineer · Résumé",
   description: "Résumé of Thomas Gates III, Forward Deployed Engineer. Ships LLM and agentic AI systems into production.",
 };
 

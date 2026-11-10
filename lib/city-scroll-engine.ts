@@ -21,7 +21,13 @@ type Opts = {
 
 export type ScrubPath = "canvas" | "video";
 
-const FADE = 0.06;
+// Overlays sit fully opaque for most of their range: a short fade at each edge, inset by a small
+// gap so the outgoing card is gone before the incoming one starts (no half-faded pair mid-screen).
+const FADE = 0.03;
+const GAP = 0.006;
+// After the last frame the stage stays pinned for HOLD x its height while the Projects lobby
+// cross-fades in underneath (see Gallery.tsx and .cs + .lobby in globals.css).
+export const HOLD = 0.6;
 const SMOOTH_MS = 110; // time constant for easing toward the scroll target (frame-rate independent)
 const CONCURRENCY = 6;
 const clamp = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
@@ -49,20 +55,25 @@ export function startCityScroll(els: Els, o: Opts) {
   let activeDot = -1;
 
   // ---------- progress + overlays ----------
+  // Scroll distance over which p runs 0..1: section height minus the pinned stage and the hold.
+  const filmSpan = () => {
+    const stageH = (section.querySelector(".cs-stage") as HTMLElement | null)?.clientHeight || innerHeight;
+    return section.offsetHeight - stageH * (1 + HOLD);
+  };
   const measure = () => {
     const r = section.getBoundingClientRect();
-    const span = r.height - innerHeight;
+    const span = filmSpan();
     target = span > 0 ? clamp(-r.top / span) : 0;
   };
 
   const applyOverlays = (p: number) => {
     fades.forEach((el, i) => {
       const [a, b] = ranges[i];
-      const vin = a <= 0 ? 1 : clamp((p - a) / FADE);
-      const vout = b >= 1 ? 1 : clamp((b - p) / FADE);
+      const vin = a <= 0 ? 1 : clamp((p - a - GAP) / FADE);
+      const vout = b >= 1 ? 1 : clamp((b - GAP - p) / FADE);
       const v = Math.min(vin, vout);
       el.style.opacity = String(v);
-      el.style.transform = `translate3d(0, ${(1 - v) * 12}px, 0)`;
+      if (!("fadeOnly" in el.dataset)) el.style.transform = `translate3d(0, ${(1 - v) * 12}px, 0)`;
       el.style.visibility = v < 0.01 ? "hidden" : "visible";
     });
     let active = 0;
@@ -237,9 +248,9 @@ export function startCityScroll(els: Els, o: Opts) {
 
   const scrollToStage = (i: number) => {
     const s = o.stageStarts[i];
-    const p = i === 0 ? 0 : i === o.stageStarts.length - 1 ? 1 : s + FADE;
+    const p = i === 0 ? 0 : s + GAP + FADE + 0.01; // lands inside the fully opaque hold
     const top = section.getBoundingClientRect().top + scrollY;
-    scrollTo({ top: top + p * (section.offsetHeight - innerHeight), behavior: "smooth" });
+    scrollTo({ top: top + p * filmSpan(), behavior: "smooth" });
   };
 
   return {

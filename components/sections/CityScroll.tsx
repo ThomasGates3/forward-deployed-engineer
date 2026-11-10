@@ -13,15 +13,12 @@ const navItems = [
   { label: "Contact", href: "#contact" },
 ];
 
-const tag = (s: Stage) => `[${s.n} ${s.label.toUpperCase()}]`;
-
 function StageCard({ s, children }: { s: Stage; children?: React.ReactNode }) {
   return (
     <div className="cs-card" data-testid={`cs-stage-${s.n}`}>
       {/* Keyframe still: only shown in the static (reduced-motion / no-JS) list. */}
       <img className="cs-still" src={s.still} alt={s.stillAlt} loading="lazy" width={640} height={360} />
       <div>
-        <p className="cs-tag">{tag(s)}</p>
         {s.title && <h2 className="cs-title">{s.title}</h2>}
         {s.body && <p className="cs-body">{s.body}</p>}
         {s.href && (
@@ -123,7 +120,6 @@ export function CityScroll() {
         <div className="cs-hero" data-range={`${rooftop.start},${rooftop.end}`} data-testid="cs-stage-01">
           <div className="grid grid-cols-12 items-end gap-6">
             <div className="col-span-12 lg:col-span-8">
-              <p className="cs-tag mb-3 pl-1">{tag(rooftop)}</p>
               <h1 className="cs-rise whitespace-nowrap font-display font-medium leading-[0.85] tracking-[-0.05em] text-cream text-[9.5vw] sm:text-[11vw] md:text-[9.5vw] lg:text-[7.5vw]">
                 Thomas Gates III
               </h1>
@@ -154,7 +150,7 @@ export function CityScroll() {
               key={s.n}
               type="button"
               className="cs-dot"
-              aria-label={`Go to ${s.n} ${s.label}`}
+              aria-label={`Go to ${s.label}`}
               aria-current={i === 0 ? "true" : undefined}
               data-testid={`cs-dot-${s.n}`}
               onClick={() => engine.current?.scrollToStage(i)}
@@ -168,11 +164,9 @@ export function CityScroll() {
         {rest.map((s) =>
           s.items ? (
             <div key={s.n} className="cs-group" data-testid={`cs-stage-${s.n}`}>
-              <p className="cs-tag cs-static-only">{tag(s)}</p>
               <img className="cs-still" src={s.still} alt={s.stillAlt} loading="lazy" width={640} height={360} />
               {s.items.map((it, j) => (
                 <div key={it.title} className={`cs-card cs-item cs-item-${j}`} data-range={`${it.start},${s.end}`}>
-                  <p className="cs-tag cs-film-only">{tag(s)}</p>
                   <h2 className="cs-title">{it.title}</h2>
                   <p className="cs-body">{it.body}</p>
                   {it.href && (

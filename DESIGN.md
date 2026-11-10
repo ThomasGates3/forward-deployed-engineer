@@ -101,7 +101,7 @@ interaction on the site.
 
 ## Colors
 
-- `primary` cyan `#22D3EE` is the signal: active rail dot, stage tags, primary buttons, hover
+- `primary` cyan `#22D3EE` is the signal: active rail dot, "See it live" links, primary buttons, hover
   states. Use it sparingly so it keeps meaning "live".
 - `electric` `#2F6BFF` is the only partner color, for rare secondary emphasis. Never gradient it
   into anything outside the blue family.
@@ -117,7 +117,7 @@ interaction on the site.
 | Stage line (h2) | Space Grotesk 500 | display-md | -0.03em |
 | Section heading | Space Grotesk 500 | heading | -0.02em |
 | Body | Inter 400 | 1rem / 1.6, max 62ch | 0 |
-| Stage tag, nav, buttons | JetBrains Mono 500, uppercase | 0.75rem | +0.08em |
+| Nav, buttons, links | JetBrains Mono 500, uppercase | 0.75rem | +0.08em |
 
 One `<h1>` per page: the name. Stage lines are `<h2>`.
 
@@ -140,13 +140,13 @@ LiquidButton and rail dots.
 
 ## Components
 
-- **HUD card:** panel background, hairline border, 16px radius, 24px padding. Mono stage tag
-  `[02 SIGNAL]` in cyan above an h2 and a silver body line. Fades and lifts in (opacity 0 to 1,
-  translateY 12px to 0) over 6% of scroll.
+- **HUD card:** panel background, hairline border, 16px radius, 24px padding. An h2 and a silver
+  body line, no stage number or label above it. Fades and lifts in (opacity 0 to 1, translateY
+  12px to 0) over 6% of scroll.
 - **Progress rail:** 1px vertical line on the right with five dots as buttons. Active dot is cyan
   with a soft glow. Hidden under 768px.
 - **Buttons:** solid cyan with dark text, or outline with hairline/edge border; 44px min height.
-- **Cards:** existing project cards, `id` equal to the demo id so stage tags can link to them.
+- **Cards:** existing project cards, `id` equal to the demo id so stage cards can link to them.
 
 ## Voice
 
@@ -165,11 +165,12 @@ clients, testimonials, logos or prices. Banned: em dashes in visible copy, "elev
 - Don't build fake product UI out of divs; use the real film frames and stills.
 - Don't use three equal icon-in-circle feature columns or stock headshots.
 - Don't put em dashes in visible copy.
+- Don't label the film stops with numbers or names (`[02 SIGNAL]` style). The headline carries the stop.
 
 ## Responsive Behavior
 
-- ≥768px: canvas frame scrub, 520vh pinned section, HUD bottom-left, rail visible.
-- <768px: video scrub of the 720x1280 crop, 420vh section, HUD bottom-center, no rail.
+- ≥768px: canvas frame scrub (adjacent frames cross-faded), 600vh pinned section, HUD bottom-left, rail visible.
+- <768px: video scrub of the 720x1280 crop, 480vh section, HUD bottom-center, no rail.
 - Save-Data or 2g/3g: video scrub at any width. Reduced motion: no pinning, poster + list.
 - Touch targets 44px minimum.
 

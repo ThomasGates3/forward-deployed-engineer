@@ -1,10 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const display = Space_Grotesk({ subsets: ["latin"], variable: "--font-display", weight: ["500", "600", "700"] });
-const sans = Inter({ subsets: ["latin"], variable: "--font-sans" });
-const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono", weight: ["400", "500"] });
+// Self-hosted (latin variable woff2) so builds never depend on a live Google Fonts fetch.
+const display = localFont({ src: "./fonts/space-grotesk-latin.woff2", variable: "--font-display", weight: "300 700", display: "swap" });
+const sans = localFont({ src: "./fonts/inter-latin.woff2", variable: "--font-sans", weight: "100 900", display: "swap" });
+const mono = localFont({ src: "./fonts/jetbrains-mono-latin.woff2", variable: "--font-mono", weight: "100 800", display: "swap" });
 
 const title = "Thomas Gates III | Forward Deployed Engineer";
 const description = "A portfolio of live, working AI tools. I embed with businesses and ship Claude-powered features into production.";

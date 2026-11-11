@@ -17,6 +17,8 @@ type Opts = {
   video: string;
   videoMobile: string;
   stageStarts: number[];
+  // Absolute scrollY of the Projects heading: the last snap stop after the door flight.
+  endStop?: () => number | null;
 };
 
 export type ScrubPath = "canvas" | "video";
@@ -125,7 +127,8 @@ export function startCityScroll(els: Els, o: Opts) {
   // Draws the exact sub-frame position by cross-fading the two nearest loaded frames,
   // so motion stays continuous between frames (and across gaps while frames are still loading).
   let drawnKey = "";
-  const drawFrame = (p: number) => {
+  // At rest (crisp) it shows the single nearest frame instead of a blend, so a paused frame is sharp.
+  const drawFrame = (p: number, crisp = false) => {
     if (!ctx) return;
     const x = p * (o.frameCount - 1);
     let a = loadedBelow(x);
@@ -133,7 +136,8 @@ export function startCityScroll(els: Els, o: Opts) {
     if (a < 0) a = b;
     if (b < 0) b = a;
     if (a < 0) return; // nothing loaded yet: the poster stays up, never a blank frame
-    const t = a === b ? 0 : Math.round(((x - a) / (b - a)) * 24) / 24;
+    let t = a === b ? 0 : Math.round(((x - a) / (b - a)) * 24) / 24;
+    if (crisp && t > 0) { if (t >= 0.5) a = b; t = 0; }
     const key = `${a}|${b}|${t}`;
     if (key === drawnKey) return;
     cover(imgs[a]!, 1);
@@ -221,17 +225,57 @@ export function startCityScroll(els: Els, o: Opts) {
     const settled = Math.abs(target - cur) < 1e-4;
     cur = cur < 0 || settled ? target : cur + (target - cur) * (1 - Math.exp(-dt / SMOOTH_MS));
     applyOverlays(cur);
-    if (path === "canvas") drawFrame(cur);
+    if (path === "canvas") drawFrame(cur, cur === target);
     else seekVideo(cur);
     if (cur !== target) kick();
     else last = 0;
   }
 
-  const onScroll = () => { measure(); kick(); };
+  // ---------- snap to the nearest card when a visitor stops between stops ----------
+  // Every card's fully-opaque hold, in p. Stopping inside one is left alone; stopping in the
+  // transit between two glides (smooth scroll) to the next card in the direction of travel.
+  const holds = fades
+    .map((el, i) => ({ el, r: ranges[i] }))
+    .filter(({ el }) => !("fadeOnly" in el.dataset) && !("noSnap" in el.dataset))
+    .map(({ r: [a, b] }) => [a <= 0 ? 0 : a + GAP + FADE, b >= 1 ? 1 : b - GAP - FADE] as const)
+    .filter(([a, b]) => b > a);
+  let lastY = scrollY;
+  let dir = 1;
+  let snapTimer = 0;
+  let touching = false;
+  const trySnap = () => {
+    if (stopped || touching) return;
+    const top = section.getBoundingClientRect().top + scrollY;
+    const span = filmSpan();
+    const y = scrollY;
+    const end = o.endStop?.() ?? top + span;
+    if (y <= top + 1 || y >= end - 1) return; // above the film or already at the Projects heading
+    const p = (y - top) / span;
+    if (holds.some(([a, b]) => p >= a - 0.002 && p <= b + 0.002)) return; // a card is fully visible
+    const stops = [...holds.map(([a, b]) => top + (a <= 0 ? 0 : (a + b) / 2) * span), end].sort((m, n) => m - n);
+    const next = stops.find((s) => s > y) ?? end;
+    const prev = [...stops].reverse().find((s) => s < y) ?? top;
+    const frac = (y - prev) / Math.max(next - prev, 1);
+    const to = dir > 0 ? (frac > 0.15 ? next : prev) : frac < 0.85 ? prev : next;
+    scrollTo({ top: to, behavior: "smooth" });
+  };
+  const armSnap = () => { clearTimeout(snapTimer); snapTimer = window.setTimeout(trySnap, 180); };
+  const onTouchStart = () => { touching = true; clearTimeout(snapTimer); };
+  const onTouchEnd = () => { touching = false; armSnap(); };
+
+  const onScroll = () => {
+    measure();
+    kick();
+    if (scrollY !== lastY) dir = scrollY > lastY ? 1 : -1;
+    lastY = scrollY;
+    armSnap();
+  };
   const onResize = () => { if (path === "canvas") sizeCanvas(); onScroll(); };
   const onVisible = () => { if (!document.hidden) pump(); };
 
   addEventListener("scroll", onScroll, { passive: true });
+  addEventListener("touchstart", onTouchStart, { passive: true });
+  addEventListener("touchend", onTouchEnd, { passive: true });
   addEventListener("resize", onResize);
   document.addEventListener("visibilitychange", onVisible);
   onScroll();
@@ -262,6 +306,9 @@ export function startCityScroll(els: Els, o: Opts) {
       if (typeof cancelIdleCallback === "function") cancelIdleCallback(idleId);
       clearTimeout(idleId);
       removeEventListener("scroll", onScroll);
+      removeEventListener("touchstart", onTouchStart);
+      removeEventListener("touchend", onTouchEnd);
+      clearTimeout(snapTimer);
       removeEventListener("resize", onResize);
       removeEventListener("load", begin);
       document.removeEventListener("visibilitychange", onVisible);

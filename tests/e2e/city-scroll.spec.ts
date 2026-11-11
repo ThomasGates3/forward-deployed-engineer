@@ -4,6 +4,10 @@ import { test, expect, type Page } from "@playwright/test";
 // a drawn frame at every scroll step (606-frame film), solid overlays when paused, the lobby
 // hand-off, accurate project cards, and the reduced-motion / Save-Data fallbacks.
 
+// The film glides to the nearest card when a visitor stops between stops. Tests that need to park
+// mid-flight hold a "touch" so that snapping waits.
+const holdSnap = (page: Page) => page.evaluate(() => dispatchEvent(new Event("touchstart")));
+
 const scrollToProgress = async (page: Page, p: number) => {
   await page.evaluate((p) => {
     const s = document.getElementById("city-scroll")!;
@@ -43,17 +47,43 @@ test("copy stays accurate: no 'not demos' claim, no every-tool-is-Claude claim, 
   expect(text).not.toContain("Not demos, production");
   expect(text).not.toMatch(/Each is a server-side Claude call|every demo is live and rate-limited/i);
   await expect(page.getByText("Book a short intro")).toHaveCount(0);
+  // No model or vendor names in the Projects section or footer.
+  for (const sel of ["#gallery", "#contact"]) expect(await page.locator(sel).innerText()).not.toMatch(/haiku|claude|gemini/i);
 });
 
-test("project cards: six glass cards with the right model and real Try it links", async ({ page }) => {
+test("hero shows a scroll cue that leaves once you scroll", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  await expect(page.locator("#city-scroll")).toHaveAttribute("data-mode", "film");
+  await expect(page.getByTestId("cs-scroll-cue")).toBeVisible();
+  await holdSnap(page);
+  await scrollToProgress(page, 0.2);
+  await page.waitForTimeout(500);
+  await expect(page.getByTestId("cs-scroll-cue")).toBeHidden();
+});
+
+test("stopping between stops glides to the next card", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/");
+  await expect(page.locator("#city-scroll")).toHaveAttribute("data-mode", "film");
+  await page.mouse.move(640, 400);
+  await scrollToProgress(page, 0.31); // just past the Signal card, in transit to the Agents tower
+  await page.mouse.wheel(0, 40);
+  await page.waitForTimeout(2000);
+  const op = await page.getByTestId("cs-stage-03").locator(".cs-item-0").evaluate((e) => parseFloat(getComputedStyle(e).opacity));
+  expect(op).toBeGreaterThan(0.95);
+});
+
+test("project cards: six glass cards with art, a tag, and real Try it links", async ({ page }) => {
   await page.goto("/");
   const expected: Record<string, string> = {
-    "iam-policy-generator": "Gemini", "product-contextualizer": "Gemini", "speed-to-lead": "Claude Haiku",
-    "doc-qa": "Claude Haiku", "ops-copilot": "Claude Haiku", evals: "Claude Haiku",
+    "iam-policy-generator": "Cloud security", "product-contextualizer": "Image generation", "speed-to-lead": "Lead qualification",
+    "doc-qa": "RAG search", "ops-copilot": "AI agent", evals: "AI testing",
   };
   await expect(page.locator(".lobby-card")).toHaveCount(6);
-  for (const [id, model] of Object.entries(expected)) {
-    await expect(page.getByTestId(`card-${id}`)).toContainText(model);
+  for (const [id, tag] of Object.entries(expected)) {
+    await expect(page.getByTestId(`card-${id}`)).toContainText(tag);
+    expect(await page.getByTestId(`card-${id}`).locator("img").evaluate((i: HTMLImageElement) => i.currentSrc || i.src)).toContain(`/projects/${id}.`);
     const a = page.getByTestId(`try-${id}`);
     const href = (await a.getAttribute("href"))!;
     if (href.startsWith("http")) await expect(a).toHaveAttribute("target", "_blank");
@@ -93,6 +123,7 @@ test("film hands off to the lobby with no seam: no rule, clean last frame, scrim
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
   await expect(page.locator("#city-scroll + .lobby")).toHaveCount(1);
+  await holdSnap(page);
   await scrollToProgress(page, 1);
   await page.waitForTimeout(800);
   const s = await page.evaluate(() => ({
@@ -119,6 +150,7 @@ test("desktop: canvas draws a frame at every step and overlays run 01 to 06", as
   await page.goto("/");
   await expect(page.locator("#city-scroll")).toHaveAttribute("data-path", "canvas");
   await page.waitForFunction(() => getComputedStyle(document.querySelector("#city-scroll canvas")!).opacity === "1");
+  await holdSnap(page);
   const order: string[] = [];
   for (let i = 0; i <= 20; i++) {
     await scrollToProgress(page, i / 20);

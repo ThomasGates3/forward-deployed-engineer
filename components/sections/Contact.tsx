@@ -23,8 +23,8 @@ export function Contact() {
         </div>
       </div>
       <p className="mx-auto mt-10 max-w-2xl text-center font-mono text-xs leading-relaxed text-muted">
-        Built with Next.js. The tools hosted here run on Claude Haiku and are rate-limited. The IAM Policy
-        Generator and Product Contextualizer are standalone Gemini apps.
+        Built with Next.js. The tools hosted here are live, rate-limited demos. The IAM Policy Generator and
+        Product Contextualizer are standalone production apps.
       </p>
     </section>
   );

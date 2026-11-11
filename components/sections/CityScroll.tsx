@@ -75,6 +75,10 @@ export function CityScroll() {
         video: media.video,
         videoMobile: media.videoMobile,
         stageStarts: stages.map((s) => s.start),
+        endStop: () => {
+          const g = document.querySelector<HTMLElement>(PROJECTS_HREF);
+          return g ? g.getBoundingClientRect().top + scrollY - (parseFloat(getComputedStyle(g).scrollMarginTop) || 0) : null;
+        },
       },
     );
     return () => { engine.current?.stop(); engine.current = undefined; };
@@ -177,7 +181,22 @@ export function CityScroll() {
           ))}
         </nav>
 
-        <a href={PROJECTS_HREF} className="cs-cue cs-link" data-range="0.95,1" data-testid="cs-cue">
+        {/* Tells first-time visitors the hero scrolls. Gone as soon as they start. */}
+        <button
+          type="button"
+          className="cs-scroll-cue"
+          data-range="0,0.04"
+          data-fade-only
+          data-testid="cs-scroll-cue"
+          onClick={() => engine.current?.scrollToStage(1)}
+        >
+          <span>Scroll</span>
+          <svg viewBox="0 0 16 24" width="16" height="24" aria-hidden>
+            <path d="M8 2v18M2 14l6 6 6-6" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+
+        <a href={PROJECTS_HREF} className="cs-cue cs-link" data-range="0.95,1" data-no-snap data-testid="cs-cue">
           Projects <span aria-hidden>↓</span>
         </a>
        </div>

@@ -170,7 +170,7 @@ export default function DocQATool() {
               className="flex min-h-[280px] items-center justify-center rounded-lg border border-dashed border-edge p-8 text-center text-sm text-muted"
             >
               The answer and its cited source passages will appear here, grounded in
-              retrieved chunks of the document, not the model's general knowledge.
+              retrieved chunks of the document, not the model&apos;s general knowledge.
             </motion.div>
           ) : (
             <motion.div
@@ -199,7 +199,7 @@ export default function DocQATool() {
                       <p className="mb-1 font-mono text-[11px] uppercase tracking-wider text-accent">
                         [Source {c.chunk_index}]
                       </p>
-                      <p className="text-sm italic leading-relaxed text-cream/90">"{c.chunkText}"</p>
+                      <p className="text-sm italic leading-relaxed text-cream/90">&ldquo;{c.chunkText}&rdquo;</p>
                     </div>
                   ))}
                 </div>

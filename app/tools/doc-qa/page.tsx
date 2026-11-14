@@ -25,7 +25,7 @@ export default function Page() {
             Document Q&A, <span className="text-accent">grounded in citations</span>
           </h1>
           <p className="mt-4 text-muted">
-            This is the core FDE pattern for putting AI in front of a client's own docs. Instead of
+            This is the core FDE pattern for putting AI in front of a client&apos;s own docs. Instead of
             stuffing the whole file into context and hoping, it chunks the document, retrieves only
             the passages relevant to the question, and forces the model to answer from (and cite)
             exactly those passages. Every claim below traces back to a quoted source chunk on the right.

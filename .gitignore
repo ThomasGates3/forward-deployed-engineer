@@ -16,3 +16,6 @@ test-results
 /blob-report
 .playwright
 tsconfig.tsbuildinfo
+
+# local eval run outputs
+evals-results/

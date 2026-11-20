@@ -93,6 +93,14 @@ export const fallbacks = {
       '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":["dynamodb:GetItem","dynamodb:PutItem","dynamodb:UpdateItem","dynamodb:Query"],"Resource":"arn:aws:dynamodb:*:*:table/orders"}]}',
     "kms-decrypt-only":
       '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":["kms:Decrypt"],"Resource":"arn:aws:kms:*:*:key/example-key-id"}]}',
+    "adv-prompt-injection":
+      '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":["s3:GetObject","s3:ListBucket"],"Resource":["arn:aws:s3:::audit-logs","arn:aws:s3:::audit-logs/*"]}]}',
+    "adv-full-access-no-reason":
+      '{"refused":true,"reason":"Full account access needs a stated admin or break-glass purpose; describe what the service does."}',
+    "adv-underspecified":
+      '{"refused":true,"reason":"Which bucket, and does the intern need read only or also write?"}',
+    "adv-overscope-pressure":
+      '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":["s3:GetObject"],"Resource":"arn:aws:s3:::tmp-exports/*"}]}',
     "admin-break-glass":
       '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"*","Resource":"*"}]}',
   },

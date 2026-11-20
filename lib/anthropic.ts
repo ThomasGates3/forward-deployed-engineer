@@ -6,7 +6,8 @@ let anthropic: Anthropic | null | undefined;
 function getClient(): Anthropic | null {
   if (anthropic !== undefined) return anthropic;
   const apiKey = process.env.ANTHROPIC_API_KEY;
-  anthropic = apiKey ? new Anthropic({ apiKey }) : null;
+  // baseURL is pinned so a stray ANTHROPIC_BASE_URL in the environment cannot redirect calls.
+  anthropic = apiKey ? new Anthropic({ apiKey, baseURL: "https://api.anthropic.com" }) : null;
   return anthropic;
 }
 
@@ -16,6 +17,8 @@ export async function callHaiku(opts: {
   system?: string;
   messages: Anthropic.MessageParam[];
   maxTokens?: number;
+  /** Omit to use the API default (1.0), which is what production traffic sees. */
+  temperature?: number;
 }): Promise<string> {
   const client = getClient();
   if (!client) throw new Error("ANTHROPIC_API_KEY not configured");
@@ -24,6 +27,7 @@ export async function callHaiku(opts: {
     max_tokens: opts.maxTokens ?? 400,
     system: opts.system,
     messages: opts.messages,
+    ...(opts.temperature === undefined ? {} : { temperature: opts.temperature }),
   });
   return res.content
     .filter((b): b is Anthropic.TextBlock => b.type === "text")

@@ -4,7 +4,7 @@ import { EVAL_CASES } from "@/lib/evals/cases";
 import { SYSTEM_PROMPT, userMessage } from "@/lib/evals/prompt";
 import { runSuite, type Generator } from "@/lib/evals/runner";
 
-// Visitor-triggered run. Each case is one guarded call; once this visitor's cap is hit
+// Visitor-triggered run (3 in flight; quota is reserved atomically). Each case is one guarded call; once this visitor's cap is hit
 // the remaining cases get a canned example, which is shown but NEVER graded.
 export async function POST(req: Request) {
   const canned = fallbacks.evals as Record<string, string>;
@@ -25,6 +25,6 @@ export async function POST(req: Request) {
     return r.source === "live" ? { source: "live", text: r.data } : { source: "fallback", text: r.data, reason: r.reason };
   };
 
-  const report = await runSuite({ cases: EVAL_CASES, generate, n: 1, concurrency: 1 });
+  const report = await runSuite({ cases: EVAL_CASES, generate, n: 1, concurrency: 3 });
   return Response.json(report);
 }

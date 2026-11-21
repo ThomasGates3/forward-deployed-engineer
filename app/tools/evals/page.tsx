@@ -63,7 +63,10 @@ export default async function Page() {
 
         <footer className="mt-16 border-t border-edge pt-6 text-xs text-muted">
           {EVAL_CASES.length} fixed cases · deterministic rule-based grading, no LLM judge · canned examples are labeled
-          and never graded
+          and never graded ·{" "}
+          <Link href="/how-i-guard-agents" className="text-accent underline decoration-accent/40 underline-offset-4">
+            how the AI routes are guarded
+          </Link>
         </footer>
       </div>
     </main>

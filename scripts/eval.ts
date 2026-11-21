@@ -56,7 +56,7 @@ export async function runFromCli(trigger: RunRecord["trigger"]): Promise<RunReco
   return r;
 }
 
-if (process.argv[1]?.endsWith("eval.ts")) {
+if (/scripts\/eval\.ts$/.test(process.argv[1] ?? "")) {
   runFromCli("cli")
     .then(printReport)
     .catch((e) => {

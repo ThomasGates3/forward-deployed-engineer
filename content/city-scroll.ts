@@ -59,7 +59,7 @@ export const stages: Stage[] = [
     still: "/hero/keyframes/stage4-billboard.jpg",
     stillAlt: "A street-level holographic screen showing an abstract dashboard",
     title: "Output, graded before it ships.",
-    body: "The eval suite behind the IAM Policy Generator: 8 cases, each policy graded on pass or fail rules.",
+    body: "Evals for an IAM policy prompt: 12 cases, 4 adversarial, each output graded by unit-tested rules.",
     href: "#evals",
     fadeEnd: 0.692, // hands over early so the contact card is fully opaque from 0.728
   },

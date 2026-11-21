@@ -1,0 +1,48 @@
+# Manual only. Runs the IAM eval suite against the real API and fails if the pass rate
+# is under the threshold or a previously-passing case regressed. Costs real API calls
+# (cases x N), so it never runs on push or PR.
+name: eval-gate
+
+on:
+  workflow_dispatch:
+    inputs:
+      n:
+        description: "Runs per case"
+        default: "5"
+      threshold:
+        description: "Minimum overall pass rate (0-1)"
+        default: "0.8"
+      store:
+        description: "Store the result as the official run in Redis (needs Upstash secrets)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run test:unit
+      - name: Eval gate
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
+          UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
+        run: >
+          npm run eval:gate -- --n "${{ inputs.n }}" --threshold "${{ inputs.threshold }}"
+          ${{ inputs.store && '' || '--no-store' }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eval-results
+          path: evals-results/
+          if-no-files-found: ignore

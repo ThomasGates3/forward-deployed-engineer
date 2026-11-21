@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button, Card, Badge, CopyButton } from "@/components/ui";
 import type { CaseReport, CaseStatus, SuiteSummary } from "@/lib/evals/runner";
+import { pct } from "@/lib/evals/format";
 
 const STATUS_LABEL: Record<CaseStatus, string> = {
   pass: "Pass",
@@ -25,7 +26,6 @@ function fallbackWhy(reason?: string) {
   return "The live call failed.";
 }
 
-export const pct = (x: number | null) => (x === null ? "n/a" : `${Math.round(x * 100)}%`);
 
 export function SummaryLine({ summary, n }: { summary: SuiteSummary; n: number }) {
   return (

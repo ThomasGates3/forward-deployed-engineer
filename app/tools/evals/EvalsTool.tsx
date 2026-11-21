@@ -37,7 +37,7 @@ export default function EvalsTool({ caseCount }: { caseCount: number }) {
         <p className="mt-2 max-w-2xl text-sm text-muted">
           This sends real requests to the model, but it is capped: each visitor gets 2 live generations per day. The
           other {caseCount - 2} cases show a saved example, labeled &ldquo;not evaluated (canned example)&rdquo;, and
-          they are not counted in the pass rate below. One run per case, so this cannot show flakiness.
+          they are not counted in the pass rate below. One run per case, so this cannot show flakiness; the official run above can.
         </p>
         <Button data-testid="run-evals-btn" className="mt-4" onClick={run} disabled={loading}>
           {loading ? "Running…" : "Run live (capped) →"}

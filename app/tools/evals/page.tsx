@@ -2,6 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import EvalsTool from "./EvalsTool";
 import { EVAL_CASES } from "@/lib/evals/cases";
+import { getLatest, getHistory } from "@/lib/evals/store";
+import OfficialRun from "./OfficialRun";
+
+// Re-read the stored official run at most once a minute.
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Evals: grading AI-generated IAM policies",
@@ -9,7 +14,8 @@ export const metadata: Metadata = {
     "A fixed suite of IAM requests whose AI-generated policies are graded by deterministic, unit-tested rules: wildcards, named resources, required and forbidden actions, and service scope.",
 };
 
-export default function Page() {
+export default async function Page() {
+  const [latest, history] = await Promise.all([getLatest().catch(() => null), getHistory().catch(() => [])]);
   return (
     <main className="min-h-screen w-full bg-ink text-cream">
       <div className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-5 md:px-10 md:py-16">
@@ -44,6 +50,8 @@ export default function Page() {
             .
           </p>
         </header>
+
+        <OfficialRun latest={latest} history={history} />
 
         <EvalsTool caseCount={EVAL_CASES.length} />
 

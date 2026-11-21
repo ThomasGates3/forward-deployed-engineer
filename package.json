@@ -12,7 +12,8 @@
     "test:report": "playwright show-report",
     "typecheck": "tsc --noEmit",
     "test:unit": "vitest run",
-    "eval": "tsx scripts/eval.ts"
+    "eval": "tsx scripts/eval.ts",
+    "eval:gate": "tsx scripts/eval-gate.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.68.0",

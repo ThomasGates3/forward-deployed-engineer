@@ -17,5 +17,5 @@ export const demos: DemoMeta[] = [
   { id: "speed-to-lead", name: "Speed to Lead", tag: "Lead qualification", value: "Send yourself a fake inbound lead. Watch AI qualify it live, then get the AI‑drafted follow‑up in your inbox for real." },
   { id: "doc-qa", name: "Document Q&A", tag: "RAG search", value: "Ask a question and get an answer grounded and cited in retrieved passages from a real document. Retrieval-augmented, not context-stuffing." },
   { id: "ops-copilot", name: "Ops Copilot", tag: "AI agent", value: "A multi-turn agent making real tool calls against a mock orders and inventory dataset. Every tool call shows inline, and it pauses for human confirmation before issuing a refund." },
-  { id: "evals", name: "Evals", tag: "AI testing", value: "Before shipping the IAM Policy Generator above, I built this: an 8-case eval suite that regenerates and grades those same AI policies against deterministic pass or fail rubrics, live, so you can watch the testing, not just the output." },
+  { id: "evals", name: "Evals", tag: "AI testing", value: "A 12-case eval suite for an AI IAM-policy prompt, 4 of them adversarial. A unit-tested, rule-based grader checks every generated policy for wildcards, the right resource, and forbidden actions. Recorded runs keep the model, date, and prompt hash, so regressions show." },
 ];

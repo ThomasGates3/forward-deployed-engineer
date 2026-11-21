@@ -49,6 +49,12 @@ export default async function Page() {
             </a>
             .
           </p>
+          <Link
+            href="/tools/evals/methodology"
+            className="mt-4 inline-flex min-h-[44px] items-center font-mono text-sm uppercase tracking-wider text-accent hover:text-accent-soft"
+          >
+            How it is graded, and its limits →
+          </Link>
         </header>
 
         <OfficialRun latest={latest} history={history} />

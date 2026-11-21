@@ -72,6 +72,10 @@ export function FallbackNote({ reason }: { reason: string }) {
       ? "You've hit today's free tries for this tool, so here's a saved example so you can still see it work."
       : reason === "global-cap"
       ? "The site hit its daily demo budget, so here's a saved example response."
+      : reason === "kill-switch"
+      ? "Live AI calls are switched off site-wide right now, so here's a saved example response."
+      : reason === "timeout"
+      ? "The live call took too long and was stopped, so here's a saved example response."
       : "Showing a saved example response.";
   return (
     <div className="mb-4 flex items-center gap-2">

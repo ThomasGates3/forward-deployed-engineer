@@ -4,6 +4,7 @@ import { EVAL_CASES } from "./cases";
 import { SYSTEM_PROMPT, PROMPT_SHA256, PROMPT_VERSION, userMessage } from "./prompt";
 import { runSuite, type SuiteReport } from "./runner";
 import { callHaiku, HAIKU } from "@/lib/anthropic";
+import { killSwitchOn } from "@/lib/ai-rate-limit";
 
 export type RunRecord = SuiteReport & {
   id: string;
@@ -35,6 +36,7 @@ export async function runOfficial(opts: {
   const total = EVAL_CASES.length * opts.n;
   if (total > opts.maxCalls)
     throw new Error(`Refusing to run: ${EVAL_CASES.length} cases x N=${opts.n} = ${total} calls exceeds max ${opts.maxCalls}.`);
+  if (killSwitchOn()) throw new Error("AI_KILL_SWITCH is on: official runs are disabled.");
   if (!process.env.ANTHROPIC_API_KEY) throw new Error("ANTHROPIC_API_KEY is not set.");
 
   let calls = 0;

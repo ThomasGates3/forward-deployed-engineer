@@ -1,8 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { HAIKU } from "@/lib/anthropic";
-import { clampInput } from "@/lib/ai-rate-limit";
-import { getRedis } from "@/lib/redis";
-import { visitorId } from "@/lib/visitor";
+import { HAIKU, getAnthropicClient } from "@/lib/anthropic";
+import { clampInput, killSwitchOn, reserveQuota, timeoutMs, withTimeout, TimeoutError } from "@/lib/ai-rate-limit";
 import { fallbacks } from "@/content/fallbacks";
 
 // ---------------------------------------------------------------------------
@@ -107,31 +105,14 @@ function executeRefund(input: Record<string, unknown>) {
 }
 
 // ---------------------------------------------------------------------------
-// Rate limiting — same key pattern/caps as lib/ai-rate-limit.ts, scoped to this
-// route (issue_refund + multi-turn loops don't fit the single-shot guardedClaude
-// helper, so we replicate the peek/bump logic directly against the same Redis).
+// Guardrails. This route runs a multi-turn tool loop, so it cannot use the single-shot
+// guardedClaude helper, but it uses the same pieces: kill switch, atomic quota
+// reservation (lib/ai-rate-limit.ts), the shared client, and a time budget.
+// One conversation request = one unit of quota, capped at MAX_TURNS model calls.
 // ---------------------------------------------------------------------------
 const TOOL = "ops-copilot";
 const PER_VISITOR_CAP = 3; // conversations/day
 const MAX_TURNS = 6; // hard stop on assistant turns per request loop
-
-function today() {
-  return new Date().toISOString().slice(0, 10);
-}
-
-async function peek(key: string): Promise<number> {
-  const redis = getRedis();
-  if (!redis) return 0;
-  return (await redis.get<number>(key)) ?? 0;
-}
-
-async function bump(key: string): Promise<number> {
-  const redis = getRedis();
-  if (!redis) return 0;
-  const n = await redis.incr(key);
-  if (n === 1) await redis.expire(key, 60 * 60 * 25);
-  return n;
-}
 
 // ---------------------------------------------------------------------------
 // Types
@@ -144,14 +125,6 @@ type ReqBody = {
   pendingConfirmation?: { tool_use_id: string; tool_name: string; input: Record<string, unknown> };
   confirmed?: boolean;
 };
-
-let anthropicClient: Anthropic | null | undefined;
-function getClient(): Anthropic | null {
-  if (anthropicClient !== undefined) return anthropicClient;
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  anthropicClient = apiKey ? new Anthropic({ apiKey }) : null;
-  return anthropicClient;
-}
 
 function toAnthropicHistory(messages: ChatMessage[]): Anthropic.MessageParam[] {
   return messages.map((m) => ({ role: m.role, content: m.content }));
@@ -170,10 +143,6 @@ export async function POST(req: Request) {
     .slice(-20)
     .map((m) => ({ role: m.role === "assistant" ? "assistant" : "user", content: clampInput(m.content, 2000) }));
 
-  const day = today();
-  const visitorKey = `ai:${TOOL}:${visitorId(req)}:${day}`;
-  const toolGlobalKey = `ai:${TOOL}:global:${day}`;
-  const globalKey = `ai:global:${day}`;
 
   // ---- Confirmed-refund path: execute directly, no new model call needed for the tool itself ----
   if (body.pendingConfirmation && body.confirmed) {
@@ -185,18 +154,25 @@ export async function POST(req: Request) {
     const toolCalls: ToolCallLog[] = [{ tool: tool_name, input, result }];
 
     // Continue the conversation with the model so it can narrate the outcome.
-    const client = getClient();
-    if (!client) {
-      return Response.json({
+    const cannedDone = (reason: string) =>
+      Response.json({
         source: "fallback",
+        reason,
         reply: `Done. ${result.message} Refund ID ${result.refund_id} for $${input.amount} on order ${input.order_id}.`,
         toolCalls,
         awaitingConfirmation: false,
       });
-    }
+    const client = getAnthropicClient();
+    if (killSwitchOn()) return cannedDone("kill-switch");
+    if (!client) return cannedDone("unconfigured");
+    // The narration call counts against the tool and site caps, not the visitor's
+    // conversation cap (the conversation was already counted).
+    const quota = await reserveQuota(req, TOOL, { countVisitor: false }).catch(() => null);
+    if (!quota) return cannedDone("error");
+    if (!quota.ok) return cannedDone(quota.reason);
     try {
       const history = toAnthropicHistory(cleaned);
-      const followUp = await client.messages.create({
+      const followUp = await withTimeout((signal) => client.messages.create({
         model: HAIKU,
         max_tokens: 500,
         system: SYSTEM_PROMPT,
@@ -212,26 +188,21 @@ export async function POST(req: Request) {
             content: [{ type: "tool_result", tool_use_id, content: JSON.stringify(result) }],
           },
         ],
-      });
+      }, { signal }), timeoutMs());
       const text = followUp.content
         .filter((b): b is Anthropic.TextBlock => b.type === "text")
         .map((b) => b.text)
         .join("\n")
         .trim();
-      await Promise.all([bump(globalKey), bump(toolGlobalKey)]);
       return Response.json({
         source: "live",
         reply: text || `Refund issued: ${result.refund_id}.`,
         toolCalls,
         awaitingConfirmation: false,
       });
-    } catch {
-      return Response.json({
-        source: "fallback",
-        reply: `Done. ${result.message} Refund ID ${result.refund_id} for $${input.amount} on order ${input.order_id}.`,
-        toolCalls,
-        awaitingConfirmation: false,
-      });
+    } catch (e) {
+      if (!(e instanceof TimeoutError)) await quota.release().catch(() => {});
+      return cannedDone(e instanceof TimeoutError ? "timeout" : "error");
     }
   }
 
@@ -244,31 +215,33 @@ export async function POST(req: Request) {
     });
   }
 
-  // ---- Normal turn: check caps, then run the real tool-use loop ----
+  // ---- Normal turn: reserve quota, then run the real tool-use loop ----
+  if (killSwitchOn()) return Response.json(fallbackTurn("kill-switch"));
+  const client = getAnthropicClient();
+  if (!client) return Response.json(fallbackTurn("unconfigured"));
+  const quota = await reserveQuota(req, TOOL, { perVisitorCap: PER_VISITOR_CAP }).catch(() => null);
+  if (!quota) return Response.json(fallbackTurn("error"));
+  if (!quota.ok) return Response.json(fallbackTurn(quota.reason));
+  // One time budget for the whole loop, not per turn, so 6 turns cannot take 6x as long.
+  const deadline = Date.now() + timeoutMs();
+
   try {
-    if ((await peek(globalKey)) >= 200 || (await peek(toolGlobalKey)) >= 200) {
-      return Response.json(fallbackTurn("global-cap"));
-    }
-    if ((await peek(visitorKey)) >= PER_VISITOR_CAP) {
-      return Response.json(fallbackTurn("per-visitor-cap"));
-    }
-
-    const client = getClient();
-    if (!client) return Response.json(fallbackTurn("unconfigured"));
-
     const history: Anthropic.MessageParam[] = toAnthropicHistory(cleaned);
     const toolCalls: ToolCallLog[] = [];
     let finalText = "";
     let awaitingConfirmation: { tool_use_id: string; tool_name: string; input: Record<string, unknown> } | undefined;
 
     for (let turn = 0; turn < MAX_TURNS; turn++) {
-      const res = await client.messages.create({
-        model: HAIKU,
-        max_tokens: 600,
-        system: SYSTEM_PROMPT,
-        tools: TOOLS,
-        messages: history,
-      });
+      const remaining = deadline - Date.now();
+      if (remaining <= 0) throw new TimeoutError(timeoutMs());
+      const res = await withTimeout(
+        (signal) =>
+          client.messages.create(
+            { model: HAIKU, max_tokens: 600, system: SYSTEM_PROMPT, tools: TOOLS, messages: history },
+            { signal },
+          ),
+        remaining,
+      );
 
       const textBlocks = res.content.filter((b): b is Anthropic.TextBlock => b.type === "text");
       finalText = textBlocks.map((b) => b.text).join("\n").trim() || finalText;
@@ -299,15 +272,15 @@ export async function POST(req: Request) {
       history.push({ role: "user", content: resultBlocks });
     }
 
-    await Promise.all([bump(globalKey), bump(toolGlobalKey), bump(visitorKey)]);
-
     return Response.json({
       source: "live",
       reply: finalText,
       toolCalls,
       awaitingConfirmation: awaitingConfirmation ?? null,
     });
-  } catch {
+  } catch (e) {
+    // The reservation is kept: at least one model call may have been billed.
+    if (e instanceof TimeoutError) return Response.json(fallbackTurn("timeout"));
     return Response.json(fallbackTurn("error"));
   }
 }

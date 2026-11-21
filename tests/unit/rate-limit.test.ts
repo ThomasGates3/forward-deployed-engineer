@@ -7,7 +7,7 @@ const callHaiku = vi.fn<(opts: unknown) => Promise<string>>();
 vi.mock("@/lib/redis", () => ({ getRedis: () => redis }));
 vi.mock("@/lib/anthropic", () => ({ callHaiku: (o: unknown) => callHaiku(o) }));
 
-const { guardedClaude } = await import("@/lib/ai-rate-limit");
+const { guardedClaude, killSwitchOn, withTimeout, TimeoutError, reserveQuota } = await import("@/lib/ai-rate-limit");
 
 const req = (ip = "1.1.1.1") => new Request("http://x", { headers: { "x-forwarded-for": ip } });
 const call = (r: Request, extra: Record<string, unknown> = {}) =>
@@ -77,5 +77,68 @@ describe("guardedClaude caps under concurrency", () => {
     const r = await call(req());
     expect(r).toMatchObject({ source: "fallback", reason: "per-visitor-cap" });
     expect(redis.store).toEqual(before);
+  });
+});
+
+describe("kill switch", () => {
+  it("AI_KILL_SWITCH=1 returns a labeled fallback without reserving or calling the model", async () => {
+    process.env.AI_KILL_SWITCH = "1";
+    const r = await call(req());
+    expect(r).toMatchObject({ source: "fallback", reason: "kill-switch", data: "canned" });
+    expect(callHaiku).not.toHaveBeenCalled();
+    expect(redis.total("ai:")).toBe(0);
+  });
+  it("only an explicit on value trips it", async () => {
+    for (const v of ["0", "", "false"]) {
+      process.env.AI_KILL_SWITCH = v;
+      expect((await call(req(`9.9.9.${v.length}`))).source).toBe("live");
+    }
+    expect(killSwitchOn()).toBe(false);
+    process.env.AI_KILL_SWITCH = "true";
+    expect(killSwitchOn()).toBe(true);
+  });
+});
+
+describe("per-request timeout", () => {
+  it("returns a timeout fallback when the model call hangs, and aborts the request", async () => {
+    let aborted = false;
+    callHaiku.mockImplementation(
+      (o: unknown) =>
+        new Promise((_, reject) => {
+          const signal = (o as { signal?: AbortSignal }).signal;
+          signal?.addEventListener("abort", () => {
+            aborted = true;
+            reject(new Error("aborted"));
+          });
+        }),
+    );
+    const t0 = Date.now();
+    const r = await call(req(), { timeoutMs: 30 });
+    expect(r).toMatchObject({ source: "fallback", reason: "timeout" });
+    expect(Date.now() - t0).toBeLessThan(1000);
+    expect(aborted).toBe(true);
+  });
+  it("keeps the quota reservation on timeout (the call may still have been billed)", async () => {
+    callHaiku.mockImplementation(() => new Promise(() => {}));
+    await call(req(), { timeoutMs: 10 });
+    expect(redis.total("ai:t:global")).toBe(1);
+  });
+  it("withTimeout resolves normally when the work is fast", async () => {
+    await expect(withTimeout(async () => 42, 50)).resolves.toBe(42);
+    await expect(withTimeout(() => new Promise(() => {}), 10)).rejects.toBeInstanceOf(TimeoutError);
+  });
+});
+
+describe("reserveQuota (used by routes that cannot use guardedClaude)", () => {
+  it("is atomic under concurrency and can be released", async () => {
+    const rs = await Promise.all(Array.from({ length: 6 }, () => reserveQuota(req(), "agent", { perVisitorCap: 2 })));
+    const ok = rs.filter((r) => r.ok);
+    expect(ok).toHaveLength(2);
+    for (const r of ok) if (r.ok) await r.release();
+    expect(redis.total("ai:agent:global")).toBe(0);
+  });
+  it("can skip the per-visitor counter", async () => {
+    const r = await reserveQuota(req(), "agent", { perVisitorCap: 0, countVisitor: false });
+    expect(r.ok).toBe(true);
   });
 });

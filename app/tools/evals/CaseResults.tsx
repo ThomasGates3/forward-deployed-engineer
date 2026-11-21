@@ -23,6 +23,7 @@ function fallbackWhy(reason?: string) {
   if (reason === "global-cap") return "The site's daily live-call budget was reached.";
   if (reason === "unconfigured") return "Live model calls are not configured on this deployment.";
   if (reason === "kill-switch") return "Live AI calls are switched off site-wide right now.";
+  if (reason === "timeout") return "The live call took too long and was stopped.";
   return "The live call failed.";
 }
 

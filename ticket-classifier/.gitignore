@@ -1,0 +1,26 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Trained weights (~260 MB) and training checkpoints: regenerate with `python src/train.py`
+models/
+
+# Raw API response logs (re-creatable, and noisy in diffs)
+reports/*_raw.jsonl
+reports/*_run.log
+
+# Hugging Face cache if pointed inside the repo
+.cache/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/

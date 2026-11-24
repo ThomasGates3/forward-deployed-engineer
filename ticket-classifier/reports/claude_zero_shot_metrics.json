@@ -1,0 +1,66 @@
+{
+  "n": 295,
+  "accuracy": 0.6237,
+  "macro_f1": 0.6366,
+  "weighted_f1": 0.6219,
+  "per_class": {
+    "Active Directory": {
+      "precision": 0.2857,
+      "recall": 0.64,
+      "f1-score": 0.3951,
+      "support": 25.0
+    },
+    "Computer-Services": {
+      "precision": 0.8261,
+      "recall": 0.9048,
+      "f1-score": 0.8636,
+      "support": 21.0
+    },
+    "Fileservice": {
+      "precision": 0.9375,
+      "recall": 0.9375,
+      "f1-score": 0.9375,
+      "support": 64.0
+    },
+    "O365": {
+      "precision": 0.5714,
+      "recall": 0.7442,
+      "f1-score": 0.6465,
+      "support": 43.0
+    },
+    "Software": {
+      "precision": 0.5135,
+      "recall": 0.5135,
+      "f1-score": 0.5135,
+      "support": 37.0
+    },
+    "Support general": {
+      "precision": 0.6441,
+      "recall": 0.3619,
+      "f1-score": 0.4634,
+      "support": 105.0
+    }
+  },
+  "accuracy_near_duplicate_of_train": {
+    "n": 25,
+    "accuracy": 0.4
+  },
+  "accuracy_novel": {
+    "n": 270,
+    "accuracy": 0.6444
+  },
+  "model": "claude-opus-5-5 (zero-shot, effort=low)",
+  "latency_ms_median": 1339.2,
+  "latency_ms_p95": 3185.5,
+  "cost_usd_total": 0.274,
+  "cost_usd_per_1k_tickets": 0.93,
+  "avg_input_tokens": 790.8,
+  "avg_output_tokens": 17.1,
+  "cache_read_tokens_total": 200604,
+  "errors": 0,
+  "refusals": 0,
+  "served_by": [
+    "claude-opus-5-5"
+  ],
+  "concurrency": 8
+}

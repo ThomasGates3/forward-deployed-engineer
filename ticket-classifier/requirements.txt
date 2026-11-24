@@ -1,8 +1,9 @@
+# Tested with Python 3.13, torch 2.15.0, transformers 5.24.1, anthropic 2.13.0
 # CPU-only PyTorch wheels (much smaller). On a GPU machine / Colab, delete this line.
 --extra-index-url https://download.pytorch.org/whl/cpu
 
 torch>=2.4
-transformers>=4.46
+transformers>=5.0  # code uses the Transformers 5 TrainingArguments API
 accelerate>=1.0
 datasets>=3.0
 scikit-learn>=1.5

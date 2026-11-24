@@ -38,7 +38,7 @@ def score(y_true, y_pred, labels: list[str], seen_mask: np.ndarray | None = None
     y_true, y_pred = np.asarray(y_true), np.asarray(y_pred)
     out = {
         "n": int(len(y_true)),
-        "accuracy": round(float(accuracy_score(y_true, y_pred)), 4),
+        "accuracy": round(float(accuracy_score(y_true, y_pred)), 6),
         "macro_f1": round(float(f1_score(y_true, y_pred, labels=labels, average="macro", zero_division=0)), 4),
         "weighted_f1": round(float(f1_score(y_true, y_pred, labels=labels, average="weighted", zero_division=0)), 4),
         "per_class": {
@@ -53,7 +53,7 @@ def score(y_true, y_pred, labels: list[str], seen_mask: np.ndarray | None = None
         for name, mask in (("near_duplicate_of_train", seen_mask), ("novel", ~seen_mask)):
             out[f"accuracy_{name}"] = {
                 "n": int(mask.sum()),
-                "accuracy": round(float(accuracy_score(y_true[mask], y_pred[mask])), 4) if mask.any() else None,
+                "accuracy": round(float(accuracy_score(y_true[mask], y_pred[mask])), 6) if mask.any() else None,
             }
     return out
 

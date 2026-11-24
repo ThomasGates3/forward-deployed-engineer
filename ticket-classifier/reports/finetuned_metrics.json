@@ -1,0 +1,59 @@
+{
+  "n": 295,
+  "accuracy": 0.769492,
+  "macro_f1": 0.7051,
+  "weighted_f1": 0.758,
+  "per_class": {
+    "Active Directory": {
+      "precision": 0.6667,
+      "recall": 0.24,
+      "f1-score": 0.3529,
+      "support": 25.0
+    },
+    "Computer-Services": {
+      "precision": 0.8889,
+      "recall": 0.7619,
+      "f1-score": 0.8205,
+      "support": 21.0
+    },
+    "Fileservice": {
+      "precision": 0.8615,
+      "recall": 0.875,
+      "f1-score": 0.8682,
+      "support": 64.0
+    },
+    "O365": {
+      "precision": 0.8333,
+      "recall": 0.6977,
+      "f1-score": 0.7595,
+      "support": 43.0
+    },
+    "Software": {
+      "precision": 0.5581,
+      "recall": 0.6486,
+      "f1-score": 0.6,
+      "support": 37.0
+    },
+    "Support general": {
+      "precision": 0.7661,
+      "recall": 0.9048,
+      "f1-score": 0.8297,
+      "support": 105.0
+    }
+  },
+  "accuracy_near_duplicate_of_train": {
+    "n": 25,
+    "accuracy": 0.84
+  },
+  "accuracy_novel": {
+    "n": 270,
+    "accuracy": 0.762963
+  },
+  "model": "distilbert-base-uncased (fine-tuned)",
+  "hardware": "CPU, 4 threads",
+  "latency_ms_median": 16.2,
+  "latency_ms_p95": 32.9,
+  "cost_usd_total": 0.0,
+  "cost_note": "No per-request fee; runs on your own CPU.",
+  "model_size_mb": 268.6
+}
